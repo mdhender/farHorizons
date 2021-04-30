@@ -3,4 +3,5 @@
 *.sh           text eol=lf
 .gitattributes text eol=lf
 .gitignore     text eol=lf
+AUTHORS        text eol=lf
 LICENSE        text eol=lf
