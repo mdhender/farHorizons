@@ -28,6 +28,7 @@ type GalaxyData struct {
 	NumSpecies  int
 	Radius      int
 	TurnNumber  int
+	NumberOfWormHoles int
 	Stars       []*StarData
 }
 
@@ -121,6 +122,57 @@ func GenerateGalaxy(ns int) (*GalaxyData, error) {
 			}
 			galaxy.Stars = append(galaxy.Stars, star)
 		}
+	}
+
+	// generate natural wormholes
+	minWormholeLength := 20 // galactic_radius + 3 // in parsecs
+	//if minWormholeLength > 20 {
+	//	minWormholeLength = 20
+	//}
+	for _, star := range galaxy.Stars {
+		if star.HomeSystem || star.WormHere || rnd(100) < 92 {
+			continue
+		}
+
+		// we want to put a wormhole here if we can find a star at least that minimum distance away that doesn't already have a worm hole
+		var worm_star *StarData
+		for k, f := 0, rnd(desired_num_stars); k < desired_num_stars && worm_star == nil; k++ {
+			ps := galaxy.Stars[(k + f) % desired_num_stars]
+			if ps == star || ps.HomeSystem || ps.WormHere {
+				continue
+			}
+			// eliminate wormholes less than the minimum
+			dx, dy, dz := star.X-ps.X, star.Y-ps.Y, star.Z-ps.Z
+			if distance_squared := (dx * dx) + (dy * dy) + (dz * dz); distance_squared < minWormholeLength * minWormholeLength {
+				continue
+			}
+			worm_star = ps
+		}
+		if worm_star == nil {
+			// wow. none of the existing stars met the criteria
+			continue
+		}
+
+		star.WormHere = true
+		star.WormX, star.WormY, star.WormZ = worm_star.X, worm_star.Y, worm_star.Z
+
+		worm_star.WormHere = true
+		worm_star.WormX, worm_star.WormY, worm_star.WormZ = star.X, star.Y, star.Z
+
+		// todo: consider making a number of the wormholes one-way
+		galaxy.NumberOfWormHoles++
+	}
+
+	numPlanets := 0
+	for _, star := range galaxy.Stars {
+		numPlanets += len(star.Planets)
+	}
+
+	fmt.Printf("This galaxy contains a total of %d stars and %d planets.\n", len(galaxy.Stars), numPlanets)
+	if galaxy.NumberOfWormHoles == 1 {
+		fmt.Printf("The galaxy contains %d natural wormhole.\n\n", galaxy.NumberOfWormHoles)
+	} else {
+		fmt.Printf("The galaxy contains %d natural wormholes.\n\n", galaxy.NumberOfWormHoles)
 	}
 
 	return galaxy, nil

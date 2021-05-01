@@ -4,6 +4,7 @@
     "NumSpecies": 0,
     "Radius": 12,
     "TurnNumber": 0,
+    "NumberOfWormHoles": 1,
     "Stars": [
       {
         "X": 4,
@@ -14,10 +15,10 @@
         "Size": 4,
         "NumPlanets": 4,
         "HomeSystem": false,
-        "WormHere": false,
-        "WormX": 0,
-        "WormY": 0,
-        "WormZ": 0,
+        "WormHere": true,
+        "WormX": 16,
+        "WormY": 17,
+        "WormZ": 20,
         "Message": 0,
         "VisitedBy": [
           0,
@@ -1353,10 +1354,10 @@
         "Size": 5,
         "NumPlanets": 9,
         "HomeSystem": false,
-        "WormHere": false,
-        "WormX": 0,
-        "WormY": 0,
-        "WormZ": 0,
+        "WormHere": true,
+        "WormX": 4,
+        "WormY": 5,
+        "WormZ": 8,
         "Message": 0,
         "VisitedBy": [
           0,
