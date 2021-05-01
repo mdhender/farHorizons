@@ -55,7 +55,7 @@ The number of stars is based on the number of species, and will be somewhere bet
 		} else if err := ioutil.WriteFile(name, b, 0644); err != nil {
 			return err
 		}
-		fmt.Printf("created %q\n", name)
+		fmt.Printf("Created %q.\n", name)
 		return nil
 	},
 }
