@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package headers
+package common
 
 const TRUE = 1
 const FALSE = 0
@@ -77,25 +77,6 @@ const ORANGE = 6
 const RED = 7
 
 type short = int32
-
-type star_data struct {
-	x, y, z                char /* Coordinates. */
-	star_type              char /* Dwarf, degenerate, main sequence or giant. */ // was `type`
-	color                  char /* Star color. Blue, blue-white, etc. */
-	size                   char /* Star size, from 0 thru 9 inclusive. */
-	num_planets            char /* Number of usable planets in star system. */
-	home_system            char /* TRUE if this is a good potential home system. */
-	worm_here              char /* TRUE if wormhole entry/exit. */
-	worm_x, worm_y, worm_z char
-	reserved1              short                   /* Reserved for future use. Zero for now. */
-	reserved2              short                   /* Reserved for future use. Zero for now. */
-	planet_index           short                   /* Index (starting at zero) into the file "planets.dat" of the first planet in the star system. */
-	message                long                    /* Message associated with this star system, if any. */
-	visited_by             [NUM_CONTACT_WORDS]long /* A bit is set if corresponding species has been here. */
-	reserved3              long                    /* Reserved for future use. Zero for now. */
-	reserved4              long                    /* Reserved for future use. Zero for now. */
-	reserved5              long                    /* Reserved for future use. Zero for now. */
-}
 
 /* Gases in planetary atmospheres. */
 const H2 = 1   /* Hydrogen */

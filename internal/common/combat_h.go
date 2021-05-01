@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package headers
+package common
 
 /* Maximum number of battle locations for all players. */
 const MAX_BATTLES = 50
@@ -30,7 +30,7 @@ const MAX_ENGAGE_OPTIONS = 20
 
 type char = byte
 type long = int64
-type cstring struct {
+type CString struct {
 	b []byte
 }
 
@@ -91,5 +91,5 @@ type action_data struct {
 	bomb_damage            [MAX_SHIPS]long
 	surprised              [MAX_SHIPS]char
 	unit_type              [MAX_SHIPS]char
-	fighting_unit          [MAX_SHIPS]*cstring
+	fighting_unit          [MAX_SHIPS]*CString
 }
