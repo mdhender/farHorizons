@@ -73,19 +73,19 @@ func (t *StarColor) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	switch string(b) {
-	case "blue":
+	case `"blue"`:
 		*t = BLUE
-	case "blue-white":
+	case `"blue-white"`:
 		*t = BLUE_WHITE
-	case "white":
+	case `"white"`:
 		*t = WHITE
-	case "yellow-white":
+	case `"yellow-white"`:
 		*t = YELLOW_WHITE
-	case "yellow":
+	case `"yellow"`:
 		*t = YELLOW
-	case "orange":
+	case `"orange"`:
 		*t = ORANGE
-	case "red":
+	case `"red"`:
 		*t = RED
 	default:
 		return fmt.Errorf("invalid StarColor %q", string(b))
@@ -161,31 +161,31 @@ func (t *GasType) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	switch string(b) {
-	case "Hydrogen":
+	case `"Hydrogen"`:
 		*t = H2
-	case "Methane":
+	case `"Methane"`:
 		*t = CH4
-	case "Helium":
+	case `"Helium"`:
 		*t = HE
-	case "Ammonia":
+	case `"Ammonia"`:
 		*t = NH3
-	case "Nitrogen":
+	case `"Nitrogen"`:
 		*t = N2
-	case "Carbon Dioxide":
+	case `"Carbon Dioxide"`:
 		*t = CO2
-	case "Oxygen":
+	case `"Oxygen"`:
 		*t = O2
-	case "Hydrogen Chloride":
+	case `"Hydrogen Chloride"`:
 		*t = HCL
-	case "Chlorine":
+	case `"Chlorine"`:
 		*t = CL2
-	case "Fluorine":
+	case `"Fluorine"`:
 		*t = F2
-	case "Steam":
+	case `"Steam"`:
 		*t = H2O
-	case "Sulfur Dioxide":
+	case `"Sulfur Dioxide"`:
 		*t = SO2
-	case "Hydrogen Sulfide":
+	case `"Hydrogen Sulfide"`:
 		*t = H2S
 	default:
 		return fmt.Errorf("invalid GasType %q", string(b))
@@ -233,13 +233,13 @@ func (t *StarType) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	switch string(b) {
-	case "dwarf":
+	case `"dwarf"`:
 		*t = DWARF
-	case "degenerate":
+	case `"degenerate"`:
 		*t = DEGENERATE
-	case "main-sequence":
+	case `"main-sequence"`:
 		*t = MAIN_SEQUENCE
-	case "giant":
+	case `"giant"`:
 		*t = GIANT
 	default:
 		return fmt.Errorf("invalid StarType %q", string(b))

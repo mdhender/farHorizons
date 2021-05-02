@@ -19,17 +19,19 @@
 package fh
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 )
 
 type GalaxyData struct {
-	Secret      string
-	DNumSpecies int
-	NumSpecies  int
-	Radius      int
-	TurnNumber  int
+	Secret            string
+	DNumSpecies       int
+	NumSpecies        int
+	Radius            int
+	TurnNumber        int
 	NumberOfWormHoles int
-	Stars       []*StarData
+	Stars             []*StarData
 }
 
 func GenerateGalaxy(ns int) (*GalaxyData, error) {
@@ -137,13 +139,13 @@ func GenerateGalaxy(ns int) (*GalaxyData, error) {
 		// we want to put a wormhole here if we can find a star at least that minimum distance away that doesn't already have a worm hole
 		var worm_star *StarData
 		for k, f := 0, rnd(desired_num_stars); k < desired_num_stars && worm_star == nil; k++ {
-			ps := galaxy.Stars[(k + f) % desired_num_stars]
+			ps := galaxy.Stars[(k+f)%desired_num_stars]
 			if ps == star || ps.HomeSystem || ps.WormHere {
 				continue
 			}
 			// eliminate wormholes less than the minimum
 			dx, dy, dz := star.X-ps.X, star.Y-ps.Y, star.Z-ps.Z
-			if distance_squared := (dx * dx) + (dy * dy) + (dz * dz); distance_squared < minWormholeLength * minWormholeLength {
+			if distance_squared := (dx * dx) + (dy * dy) + (dz * dz); distance_squared < minWormholeLength*minWormholeLength {
 				continue
 			}
 			worm_star = ps
@@ -176,4 +178,17 @@ func GenerateGalaxy(ns int) (*GalaxyData, error) {
 	}
 
 	return galaxy, nil
+}
+
+// GetGalaxy loads data from a JSON file.
+func GetGalaxy(name string) (*GalaxyData, error) {
+	data, err := ioutil.ReadFile(name)
+	if err != nil {
+		return nil, err
+	}
+	var galaxy GalaxyData
+	if err := json.Unmarshal(data, &galaxy); err != nil {
+		return nil, err
+	}
+	return &galaxy, nil
 }

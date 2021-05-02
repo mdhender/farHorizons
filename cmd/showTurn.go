@@ -19,57 +19,42 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/mdhender/farHorizons/internal/fh"
-	"io/ioutil"
-
 	"github.com/spf13/cobra"
 )
 
-// createGalaxyCmd implements the create galaxy command
-var createGalaxyCmd = &cobra.Command{
-	Use:   "galaxy",
-	Short: "A galaxy manager?",
-	Long: `The command line interface to manage a galaxy.
-
-The number of species must be between ` + fmt.Sprintf("%d and %d", fh.MIN_SPECIES, fh.MAX_SPECIES) + `, inclusive.
-
-The number of stars is based on the number of species, and will be somewhere between ` + fmt.Sprintf("%d and %d", fh.MIN_STARS, fh.MAX_STARS) + `.`,
+// showTurnCmd implements the show turn command
+var showTurnCmd = &cobra.Command{
+	Use:   "turn",
+	Short: "Show turn number",
+	Long:  `The command line interface to show turn information.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := "D:/GoLand/farHorizons/testdata/galaxy.json"
-		if len(args) != 0 {
-			return fmt.Errorf("create galaxy: unknown arguments")
-		}
-		numberOfSpecies, err := cmd.Flags().GetInt("number-of-species")
+
+		// Get galaxy data.
+		galaxy, err := fh.GetGalaxy(name)
 		if err != nil {
 			return err
 		}
-		g, err := fh.GenerateGalaxy(numberOfSpecies)
-		if err != nil {
-			return err
-		}
-		if b, err := json.MarshalIndent(g, "  ", "  "); err != nil {
-			return err
-		} else if err := ioutil.WriteFile(name, b, 0644); err != nil {
-			return err
-		}
-		fmt.Printf("Created %q.\n", name)
+
+		// print the current turn number
+		fmt.Printf("%d\n", galaxy.TurnNumber)
+
 		return nil
 	},
 }
 
 func init() {
-	createCmd.AddCommand(createGalaxyCmd)
+	showCmd.AddCommand(showTurnCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// createGalaxyCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// showTurnCmd.PersistentFlags().Int("number-of-species", 9, "number of species to create in the galaxy")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	createGalaxyCmd.Flags().IntP("number-of-species", "n", 9, "number of species to create in the galaxy")
-	_ = createGalaxyCmd.MarkFlagRequired("number-of-species")
+	// showTurnCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
