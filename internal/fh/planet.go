@@ -19,9 +19,9 @@
 package fh
 
 type PlanetData struct {
-	TemperatureClass int        /* Temperature class, 1-30. */
-	PressureClass    int        /* Pressure class, 0-29. */
-	Special          int        /* 0 = not special, 1 = ideal home planet, 2 = ideal colony planet, 3 = radioactive hellhole. */
+	TemperatureClass int /* Temperature class, 1-30. */
+	PressureClass    int /* Pressure class, 0-29. */
+	Special          PlanetSpecialType
 	Gases            []*GasData /* Gas in atmosphere. Nil if none. */
 	Diameter         int        /* Diameter in thousands of kilometers. */
 	Density          int
@@ -37,26 +37,142 @@ type GasData struct {
 	Percentage int
 }
 
+// Values for the planets of Earth's solar system will be used as starting values.
+// Diameters are in thousands of kilometers.
+// The zeroth element of each array is a placeholder and is not used.
+// The fifth element corresponds to the asteroid belt, and is pure fantasy on my part.
+// I omitted Pluto because it is probably a captured planet, rather than an original member of our solar system.
+var earth = []struct{ diameter, temperatureClass int }{
+	{0, 0},   // unused
+	{5, 29},  // Mercury
+	{12, 27}, // Venus
+	{13, 11}, // Earth
+	{7, 9},   // Mars
+	{20, 8},  // Asteroid Belt
+	{143, 6}, // Jupiter
+	{121, 5}, // Saturn
+	{51, 5},  // Uranus
+	{49, 3},  // Neptune
+}
+
+// GenerateEarthLikePlanet will try to random generate a set of planets
+// that contains one Earth-like planet. If it can't, it will return nil.
+func GenerateEarthLikePlanet(num_planets int) []*PlanetData {
+	// set flag to indicate this star system requires an earth-like planet.
+	// We will reset it after we have created one.
+	make_earth := true
+
+	var planets []*PlanetData
+	var homePlanet *PlanetData
+
+	/* Main loop. Generate one planet at a time. */
+	for planet_number := 1; planet_number <= num_planets; planet_number++ {
+		planet := &PlanetData{}
+		planets = append(planets, planet)
+
+		/* Start with diameters, temperature classes and pressure classes based on the planets in Earth's solar system. */
+		var startOffset int
+		if num_planets <= 3 {
+			startOffset = 2*planet_number + 1
+		} else {
+			startOffset = (9 * planet_number) / num_planets
+		}
+		planet.Diameter = planet.GenerateDiameter(earth[startOffset].diameter)
+		planet.TemperatureClass = earth[startOffset].temperatureClass
+
+		/* If diameter is greater than 40,000 km, assume the planet is a gas giant. */
+		gas_giant := (planet.Diameter > 40)
+
+		planet.Density = planet.GenerateDensity(gas_giant)
+
+		// Gravitational acceleration is proportional to the mass divided by the radius-squared.
+		// The radius is proportional to the diameter, and the mass is proportional to the density times the radius-cubed.
+		// The net result is that "g" is proportional to the density times the diameter.
+		// Our value for "g" will be a multiple of Earth gravity, and will be further multiplied by 100 to allow us to use integer arithmetic.
+		// The factor 72 ensures that "g" will be 100 for Earth (density=550 and diameter=13).
+		planet.Gravity = (planet.Density * planet.Diameter) / 72
+
+		planet.TemperatureClass = planet.GenerateTemperatureClass(num_planets, planet_number, gas_giant, earth[startOffset].temperatureClass)
+		/* Make sure that planets farther from the sun are not warmer than planets closer to the sun. */
+		if planet_number > 1 && planets[planet_number-1].TemperatureClass < planet.TemperatureClass {
+			planet.TemperatureClass = planets[planet_number-1].TemperatureClass - (rnd(3) - 1)
+			if planet.TemperatureClass < 1 {
+				planet.TemperatureClass = 1
+			}
+		}
+
+		// Check if this planet should be earth-like.
+		// If so, discard all of the above and replace with earth-like characteristics.
+		if make_earth && homePlanet == nil && planet.TemperatureClass <= 11 {
+			homePlanet, make_earth = planet, false /* Once only. */
+
+			planet.Diameter = 11 + rnd(3)
+			planet.Gravity = 93 + rnd(11) + rnd(11) + rnd(5)
+			planet.TemperatureClass = 9 + rnd(3)
+			planet.PressureClass = 8 + rnd(3)
+			planet.MiningDifficulty = 208 + rnd(11) + rnd(11)
+			planet.Special = IDEAL_HOME_PLANET /* Maybe ideal home planet. */
+
+			pctRemaining := 100
+			if rnd(3) == 1 {
+				/* Give it a shot of ammonia. */
+				gas := &GasData{NH3, rnd(30)}
+				planet.Gases = append(planet.Gases, gas)
+				pctRemaining -= gas.Percentage
+			}
+
+			if rnd(3) == 1 {
+				/* Give it a shot of carbon dioxide. */
+				gas := &GasData{CO2, rnd(30)}
+				planet.Gases = append(planet.Gases, gas)
+				pctRemaining -= gas.Percentage
+			}
+
+			/* Now do oxygen. */
+			gas := &GasData{O2, rnd(20) + 10}
+			planet.Gases = append(planet.Gases, gas)
+			pctRemaining -= gas.Percentage
+
+			/* Give the rest to nitrogen. */
+			gas = &GasData{N2, pctRemaining}
+			planet.Gases = append(planet.Gases, gas)
+
+			continue
+		}
+
+		/* Pressure class depends primarily on gravity. Calculate an approximate value and randomize it. */
+		planet.PressureClass = planet.GeneratePressureClass(planet.Gravity, planet.TemperatureClass, gas_giant)
+
+		/* Generate gases, if any, in the atmosphere. */
+		for _, gas := range planet.GenerateGases(planet.PressureClass, planet.TemperatureClass) {
+			planet.Gases = append(planet.Gases, gas)
+		}
+
+		// Get mining difficulty.
+		planet.MiningDifficulty = planet.GenerateMiningDifficulty(planet.Diameter, true)
+	}
+
+	if homePlanet == nil {
+		//fmt.Printf("found no home planet\n")
+		return nil
+	}
+
+	// If this is a potential home system, make sure it passes certain tests.
+	// What this test is, I do not know.
+	potential := 0
+	for _, planet := range planets {
+		potential += 20000 / ((LSN(planet, homePlanet) + 3) * (50 + planet.MiningDifficulty))
+	}
+	if potential < 54 || potential > 56 {
+		//fmt.Printf("home planet potential %d did not pass certain tests\n", potential)
+		return nil
+	}
+
+	return planets
+}
+
 func GeneratePlanet(num_planets int) ([]*PlanetData, error) {
 	var planets []*PlanetData
-
-	// Values for the planets of Earth's solar system will be used as starting values.
-	// Diameters are in thousands of kilometers.
-	// The zeroth element of each array is a placeholder and is not used.
-	// The fifth element corresponds to the asteroid belt, and is pure fantasy on my part.
-	// I omitted Pluto because it is probably a captured planet, rather than an original member of our solar system.
-	earth := []struct{ diameter, temperatureClass int }{
-		{0, 0},   // unused
-		{5, 29},  // Mercury
-		{12, 27}, // Venus
-		{13, 11}, // Earth
-		{7, 9},   // Mars
-		{20, 8},  // Asteroid Belt
-		{143, 6}, // Jupiter
-		{121, 5}, // Saturn
-		{51, 5},  // Uranus
-		{49, 3},  // Neptune
-	}
 
 	/* Main loop. Generate one planet at a time. */
 	for planet_number := 1; planet_number <= num_planets; planet_number++ {
@@ -103,7 +219,7 @@ func GeneratePlanet(num_planets int) ([]*PlanetData, error) {
 		}
 
 		// Get mining difficulty.
-		planet.MiningDifficulty = planet.GenerateMiningDifficulty(planet.Diameter)
+		planet.MiningDifficulty = planet.GenerateMiningDifficulty(planet.Diameter, false)
 	}
 
 	return planets, nil
@@ -238,15 +354,25 @@ func (p *PlanetData) GenerateGases(pressureClass, temperatureClass int) []*GasDa
 
 // GenerateMiningDifficulty
 // Basically, mining difficulty is proportional to planetary diameter with randomization and an occasional big surprise.
-// Actual values will range between 0.80 and 10.00.
+// Earth-like values will range between 0.30 and 10.00.
+// Non earth-like values will range between 0.80 and 10.00.
 // Again, the actual value will be multiplied by 100 to allow use of integer arithmetic.
-func (p *PlanetData) GenerateMiningDifficulty(diameter int) int {
+func (p *PlanetData) GenerateMiningDifficulty(diameter int, earthLike bool) int {
 	mining_dif := 0
 	for mining_dif < 40 || mining_dif > 500 {
 		mining_dif = (rnd(3)+rnd(3)+rnd(3)-rnd(4))*rnd(diameter) + rnd(30) + rnd(30)
 	}
 
-	mining_dif = (mining_dif * 11) / 5 /* Fudge factor. */
+	if earthLike {
+		for mining_dif < 30 || mining_dif > 1000 {
+			mining_dif = (rnd(3)+rnd(3)+rnd(3)-rnd(4))*rnd(diameter) + rnd(20) + rnd(20)
+		}
+	} else {
+		for mining_dif < 40 || mining_dif > 500 {
+			mining_dif = (rnd(3)+rnd(3)+rnd(3)-rnd(4))*rnd(diameter) + rnd(30) + rnd(30)
+		}
+		mining_dif = (mining_dif * 11) / 5 /* Fudge factor. */
+	}
 
 	return mining_dif
 }
@@ -334,4 +460,50 @@ func (p *PlanetData) GenerateTemperatureClass(numPlanets, orbit int, gasGiant bo
 	}
 
 	return temperatureClass
+}
+
+// LSN provides an approximate LSN (Life Support Needed) for a planet.
+// It assumes that oxygen is required and any gas that does not appear on the home planet is poisonous.
+func LSN(current_planet, home_planet *PlanetData) int {
+	ls_needed := 0
+	// need 2 points of life support for every point difference in Temperature class.
+	if current_planet.TemperatureClass < home_planet.TemperatureClass {
+		ls_needed += 2*home_planet.TemperatureClass - current_planet.TemperatureClass
+	} else if current_planet.TemperatureClass > home_planet.TemperatureClass {
+		ls_needed += 2*current_planet.TemperatureClass - home_planet.TemperatureClass
+	}
+
+	// need 2 points of life support for every point difference in Pressure class.
+	if current_planet.PressureClass < home_planet.PressureClass {
+		ls_needed += 2*home_planet.PressureClass - current_planet.PressureClass
+	} else if current_planet.PressureClass > home_planet.PressureClass {
+		ls_needed += 2*current_planet.PressureClass - home_planet.PressureClass
+	}
+
+	// check for oxygen and any poisonous gases
+	var hasOxygen bool
+	for _, gas := range current_planet.Gases {
+		if gas.Type == O2 {
+			hasOxygen = true
+		}
+	}
+	if !hasOxygen {
+		ls_needed += 2
+	}
+
+	// check for poisonous gases
+	for _, gas := range current_planet.Gases {
+		// not poisonous if found on home planet
+		isPoison := true
+		for _, hg := range home_planet.Gases {
+			if hg.Type == gas.Type {
+				isPoison = false
+			}
+		}
+		if isPoison {
+			ls_needed += 2
+		}
+	}
+
+	return ls_needed
 }

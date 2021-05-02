@@ -193,6 +193,59 @@ func (t *GasType) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type PlanetSpecialType int
+
+const (
+	NOT_SPECIAL          = 0
+	IDEAL_HOME_PLANET    = 1
+	IDEAL_COLONY_PLANET  = 2
+	RADIOACTIVE_HELLHOLE = 3
+)
+
+func (t PlanetSpecialType) String() string {
+	switch t {
+	case NOT_SPECIAL:
+		return "not-special"
+	case IDEAL_HOME_PLANET:
+		return "ideal-home-planet"
+	case IDEAL_COLONY_PLANET:
+		return "ideal-colony-planet"
+	case RADIOACTIVE_HELLHOLE:
+		return "radioactive-hellhole"
+	}
+	return "unknown"
+}
+
+// MarshalJSON marshals the enum as a quoted json string
+func (t PlanetSpecialType) MarshalJSON() ([]byte, error) {
+	buffer := bytes.NewBufferString(`"`)
+	buffer.WriteString(t.String())
+	buffer.WriteString(`"`)
+	return buffer.Bytes(), nil
+}
+
+// UnmarshalJSON unmarshals a quoted json string to the enum value
+func (t *PlanetSpecialType) UnmarshalJSON(b []byte) error {
+	var j string
+	err := json.Unmarshal(b, &j)
+	if err != nil {
+		return err
+	}
+	switch string(b) {
+	case `"not-special"`:
+		*t = NOT_SPECIAL
+	case `"ideal-home-planet"`:
+		*t = IDEAL_HOME_PLANET
+	case `"ideal-colony-planet"`:
+		*t = IDEAL_COLONY_PLANET
+	case `"radioactive-hellhole"`:
+		*t = RADIOACTIVE_HELLHOLE
+	default:
+		return fmt.Errorf("invalid StarType %q", string(b))
+	}
+	return nil
+}
+
 /* Star types. */
 type StarType int
 

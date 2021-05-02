@@ -1,0 +1,98 @@
+{
+    "Name": "HS5",
+    "Planets": [
+      {
+        "TemperatureClass": 22,
+        "PressureClass": 0,
+        "Special": "not-special",
+        "Gases": null,
+        "Diameter": 7,
+        "Density": 537,
+        "Gravity": 52,
+        "MiningDifficulty": 73,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 12,
+        "PressureClass": 9,
+        "Special": "ideal-home-planet",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 24
+          },
+          {
+            "Type": "Oxygen",
+            "Percentage": 27
+          },
+          {
+            "Type": "Nitrogen",
+            "Percentage": 49
+          }
+        ],
+        "Diameter": 13,
+        "Density": 527,
+        "Gravity": 114,
+        "MiningDifficulty": 226,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 12,
+        "PressureClass": 9,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Carbon Dioxide",
+            "Percentage": 100
+          }
+        ],
+        "Diameter": 15,
+        "Density": 394,
+        "Gravity": 82,
+        "MiningDifficulty": 54,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 5,
+        "PressureClass": 12,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Methane",
+            "Percentage": 100
+          }
+        ],
+        "Diameter": 44,
+        "Density": 69,
+        "Gravity": 42,
+        "MiningDifficulty": 121,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 3,
+        "PressureClass": 13,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 100
+          }
+        ],
+        "Diameter": 58,
+        "Density": 97,
+        "Gravity": 78,
+        "MiningDifficulty": 225,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      }
+    ]
+  }

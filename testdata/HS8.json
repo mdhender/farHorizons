@@ -1,0 +1,180 @@
+{
+    "Name": "HS8",
+    "Planets": [
+      {
+        "TemperatureClass": 16,
+        "PressureClass": 4,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Oxygen",
+            "Percentage": 12
+          },
+          {
+            "Type": "Fluorine",
+            "Percentage": 7
+          },
+          {
+            "Type": "Steam",
+            "Percentage": 81
+          }
+        ],
+        "Diameter": 7,
+        "Density": 436,
+        "Gravity": 42,
+        "MiningDifficulty": 67,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 29,
+        "PressureClass": 0,
+        "Special": "not-special",
+        "Gases": null,
+        "Diameter": 16,
+        "Density": 477,
+        "Gravity": 106,
+        "MiningDifficulty": 71,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 13,
+        "PressureClass": 8,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Nitrogen",
+            "Percentage": 75
+          },
+          {
+            "Type": "Oxygen",
+            "Percentage": 25
+          }
+        ],
+        "Diameter": 9,
+        "Density": 459,
+        "Gravity": 57,
+        "MiningDifficulty": 66,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 11,
+        "PressureClass": 11,
+        "Special": "ideal-home-planet",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 11
+          },
+          {
+            "Type": "Oxygen",
+            "Percentage": 13
+          },
+          {
+            "Type": "Nitrogen",
+            "Percentage": 76
+          }
+        ],
+        "Diameter": 12,
+        "Density": 414,
+        "Gravity": 108,
+        "MiningDifficulty": 221,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 8,
+        "PressureClass": 11,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Nitrogen",
+            "Percentage": 47
+          },
+          {
+            "Type": "Carbon Dioxide",
+            "Percentage": 35
+          },
+          {
+            "Type": "Oxygen",
+            "Percentage": 18
+          }
+        ],
+        "Diameter": 19,
+        "Density": 458,
+        "Gravity": 120,
+        "MiningDifficulty": 60,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 7,
+        "PressureClass": 13,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 100
+          }
+        ],
+        "Diameter": 55,
+        "Density": 136,
+        "Gravity": 103,
+        "MiningDifficulty": 61,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 6,
+        "PressureClass": 22,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Methane",
+            "Percentage": 36
+          },
+          {
+            "Type": "Ammonia",
+            "Percentage": 25
+          },
+          {
+            "Type": "Nitrogen",
+            "Percentage": 39
+          }
+        ],
+        "Diameter": 117,
+        "Density": 104,
+        "Gravity": 169,
+        "MiningDifficulty": 315,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 2,
+        "PressureClass": 11,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Helium",
+            "Percentage": 100
+          }
+        ],
+        "Diameter": 38,
+        "Density": 448,
+        "Gravity": 236,
+        "MiningDifficulty": 50,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      }
+    ]
+  }

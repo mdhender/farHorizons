@@ -18,6 +18,10 @@
 
 package fh
 
+import (
+	"time"
+)
+
 /* This routine will return a random int between 1 and max, inclusive.
    It uses the so-called "Algorithm M" method, which is a combination
    of the congruential and shift-register methods. */
@@ -44,4 +48,18 @@ func rnd(max int) int {
 	a = last_random & 0x0000FFFF
 
 	return int((a*uint64(max))>>16) + 1
+}
+
+// Seed random number generator
+func Seed(seed uint64) {
+	last_random = seed
+	n := rnd(100) + rnd(200) + rnd(300)
+	for i := 0; i < n; i++ {
+		rnd(10)
+	}
+}
+
+// SeedFromTime
+func SeedFromTime() {
+	Seed(uint64(time.Now().UnixNano()))
 }

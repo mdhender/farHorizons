@@ -77,11 +77,7 @@ func GenerateGalaxy(ns int) (*GalaxyData, error) {
 	}
 
 	/* Seed random number generator. */
-	//last_random = time(NULL);
-	n := rnd(100) + rnd(200) + rnd(300)
-	for i := 0; i < n; i++ {
-		rnd(10)
-	}
+	Seed(0xC0FFEE)
 
 	// randomly place stars
 	for num_stars := 0; num_stars < desired_num_stars; {

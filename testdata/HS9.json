@@ -1,0 +1,190 @@
+{
+    "Name": "HS9",
+    "Planets": [
+      {
+        "TemperatureClass": 17,
+        "PressureClass": 0,
+        "Special": "not-special",
+        "Gases": null,
+        "Diameter": 6,
+        "Density": 435,
+        "Gravity": 36,
+        "MiningDifficulty": 43,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 11,
+        "PressureClass": 10,
+        "Special": "ideal-home-planet",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 17
+          },
+          {
+            "Type": "Oxygen",
+            "Percentage": 17
+          },
+          {
+            "Type": "Nitrogen",
+            "Percentage": 66
+          }
+        ],
+        "Diameter": 12,
+        "Density": 443,
+        "Gravity": 112,
+        "MiningDifficulty": 219,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 11,
+        "PressureClass": 1,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Nitrogen",
+            "Percentage": 7
+          },
+          {
+            "Type": "Carbon Dioxide",
+            "Percentage": 93
+          }
+        ],
+        "Diameter": 11,
+        "Density": 423,
+        "Gravity": 64,
+        "MiningDifficulty": 49,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 8,
+        "PressureClass": 11,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 100
+          }
+        ],
+        "Diameter": 8,
+        "Density": 473,
+        "Gravity": 52,
+        "MiningDifficulty": 43,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 5,
+        "PressureClass": 10,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Methane",
+            "Percentage": 59
+          },
+          {
+            "Type": "Carbon Dioxide",
+            "Percentage": 41
+          }
+        ],
+        "Diameter": 28,
+        "Density": 513,
+        "Gravity": 199,
+        "MiningDifficulty": 158,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 6,
+        "PressureClass": 29,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 85
+          },
+          {
+            "Type": "Nitrogen",
+            "Percentage": 15
+          }
+        ],
+        "Diameter": 208,
+        "Density": 94,
+        "Gravity": 271,
+        "MiningDifficulty": 42,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 5,
+        "PressureClass": 13,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Methane",
+            "Percentage": 100
+          }
+        ],
+        "Diameter": 123,
+        "Density": 66,
+        "Gravity": 112,
+        "MiningDifficulty": 485,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 7,
+        "PressureClass": 11,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Ammonia",
+            "Percentage": 15
+          },
+          {
+            "Type": "Carbon Dioxide",
+            "Percentage": 85
+          }
+        ],
+        "Diameter": 66,
+        "Density": 102,
+        "Gravity": 93,
+        "MiningDifficulty": 50,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      },
+      {
+        "TemperatureClass": 3,
+        "PressureClass": 11,
+        "Special": "not-special",
+        "Gases": [
+          {
+            "Type": "Hydrogen",
+            "Percentage": 83
+          },
+          {
+            "Type": "Methane",
+            "Percentage": 17
+          }
+        ],
+        "Diameter": 17,
+        "Density": 473,
+        "Gravity": 111,
+        "MiningDifficulty": 81,
+        "EconEfficiency": 0,
+        "MDIncrease": 0,
+        "Message": 0
+      }
+    ]
+  }
