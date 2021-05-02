@@ -1,11 +1,5 @@
 # newGalaxy
 
-# Commands
-
-```sh
-$ fh create galaxy --number-of-species 8
-```
-
 # Source Notes
 ```sh
 $ cat mk.newgal
