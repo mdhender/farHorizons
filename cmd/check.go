@@ -60,6 +60,14 @@ var checkCmd = &cobra.Command{
 			}
 		}
 
+		totalPlanets := 0
+		for _, star := range galaxy.Stars {
+			totalPlanets += len(star.Planets)
+		}
+		if galaxy.NumberOfPlanets != totalPlanets {
+			errors = append(errors, fmt.Errorf("galaxy planet count %d: actual count %d", galaxy.NumberOfPlanets, totalPlanets))
+		}
+
 		if errors != nil {
 			for _, err := range errors {
 				fmt.Printf("%+v\n", err)
