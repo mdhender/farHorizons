@@ -24,6 +24,8 @@ import (
 	"fmt"
 )
 
+var StarSizeChar = []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+
 // Star colors
 type StarColor int
 
@@ -36,6 +38,26 @@ const (
 	ORANGE       = 6
 	RED          = 7
 )
+
+func (t StarColor) Char() string {
+	switch t {
+	case BLUE:
+		return "O"
+	case BLUE_WHITE:
+		return "B"
+	case WHITE:
+		return "A"
+	case YELLOW_WHITE:
+		return "F"
+	case YELLOW:
+		return "G"
+	case ORANGE:
+		return "K"
+	case RED:
+		return "M"
+	}
+	return " "
+}
 
 func (t StarColor) String() string {
 	switch t {
@@ -112,6 +134,38 @@ const (
 	SO2 = 12 /* Sulfur Dioxide */
 	H2S = 13 /* Hydrogen Sulfide */
 )
+
+func (t GasType) Char() string {
+	switch t {
+	case H2:
+		return "H2"
+	case CH4:
+		return "CH4"
+	case HE:
+		return "He"
+	case NH3:
+		return "NH3"
+	case N2:
+		return "N2"
+	case CO2:
+		return "CO2"
+	case O2:
+		return "O2"
+	case HCL:
+		return "HCl"
+	case CL2:
+		return "Cl2"
+	case F2:
+		return "F2"
+	case H2O:
+		return "H2O"
+	case SO2:
+		return "SO2"
+	case H2S:
+		return "H2S"
+	}
+	return "   "
+}
 
 func (t GasType) String() string {
 	switch t {
@@ -255,6 +309,20 @@ const (
 	MAIN_SEQUENCE = 3
 	GIANT         = 4
 )
+
+func (t StarType) Char() string {
+	switch t {
+	case DWARF:
+		return "d"
+	case DEGENERATE:
+		return "D"
+	case MAIN_SEQUENCE:
+		return " "
+	case GIANT:
+		return "g"
+	}
+	return " "
+}
 
 func (t StarType) String() string {
 	switch t {

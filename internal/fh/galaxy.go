@@ -32,6 +32,7 @@ type GalaxyData struct {
 	Radius            int
 	NumberOfStars     int
 	NumberOfWormHoles int
+	NumberOfPlanets   int
 	TurnNumber        int
 	Stars             []*StarData
 }
@@ -177,12 +178,11 @@ func GenerateGalaxy(ns int, lessCrowded bool) (*GalaxyData, error) {
 		galaxy.NumberOfWormHoles++
 	}
 
-	numPlanets := 0
 	for _, star := range galaxy.Stars {
-		numPlanets += len(star.Planets)
+		galaxy.NumberOfPlanets += len(star.Planets)
 	}
 
-	fmt.Printf("This galaxy contains a total of %d stars and %d planets.\n", len(galaxy.Stars), numPlanets)
+	fmt.Printf("This galaxy contains a total of %d stars and %d planets.\n", len(galaxy.Stars), galaxy.NumberOfPlanets)
 	if galaxy.NumberOfWormHoles == 1 {
 		fmt.Printf("The galaxy contains %d natural wormhole.\n\n", galaxy.NumberOfWormHoles)
 	} else {
@@ -203,4 +203,133 @@ func GetGalaxy(name string) (*GalaxyData, error) {
 		return nil, err
 	}
 	return &galaxy, nil
+}
+
+func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
+	// initialize counts
+	total_planets := 0
+	total_wormstars := 0
+	var type_count [10]int
+	for i := DWARF; i <= GIANT; i++ {
+		type_count[i] = 0
+	}
+
+	// for each star, list info
+	for star_index, star := range g.Stars {
+		if !listWormholes {
+			if listPlanets {
+				fmt.Printf("System #%d:\t", star_index+1)
+			}
+			fmt.Printf("x = %d\ty = %d\tz = %d", star.X, star.Y, star.Z)
+			fmt.Printf("\tstellar type = %s%s%s", star.Type.Char(), star.Color.Char(), StarSizeChar[star.Size])
+			if listPlanets {
+				fmt.Printf("\t%d planets.", star.NumPlanets)
+			}
+			fmt.Printf("\n")
+
+			if star.NumPlanets == 0 {
+				fmt.Printf("\tStar #%d went nova!", star_index+1)
+				fmt.Printf(" All planets were blown away!\n")
+			} else if star.NumPlanets != len(star.Planets) {
+				return fmt.Errorf("assert(numPlanets == lenPlanets)")
+			}
+		}
+
+		total_planets += star.NumPlanets
+		type_count[star.Type] += 1
+
+		if star.WormHere {
+			total_wormstars++
+			if listPlanets {
+				fmt.Printf("!!! Natural wormhole from here to %d %d %d\n", star.WormX, star.WormY, star.WormZ)
+			} else if listWormholes {
+				fmt.Printf("Wormhole #%d: from %d %d %d to %d %d %d\n", total_wormstars, star.X, star.Y, star.Z, star.WormX, star.WormY, star.WormZ)
+				// turn off the target's worm flag to avoid double-reporting
+				for _, worm_star := range g.Stars {
+					if star.WormX == worm_star.X && star.WormY == worm_star.Y && star.WormZ == worm_star.Z {
+						worm_star.WormHere = false
+						break
+					}
+				}
+			}
+		}
+
+		var home_planet *PlanetData
+		if listPlanets {
+			/* Check if system has a home planet. */
+			for _, planet := range star.Planets {
+				if planet.Special == IDEAL_HOME_PLANET || planet.Special == IDEAL_COLONY_PLANET {
+					home_planet = planet
+					break
+				}
+			}
+		}
+
+		if listPlanets {
+			for i, planet := range star.Planets {
+				switch planet.Special {
+				case NOT_SPECIAL:
+					fmt.Printf("     ")
+				case IDEAL_HOME_PLANET:
+					fmt.Printf(" HOM ")
+				case IDEAL_COLONY_PLANET:
+					fmt.Printf(" COL ")
+				case RADIOACTIVE_HELLHOLE:
+					fmt.Printf("     ")
+				}
+				fmt.Printf("#%d dia=%3d g=%d.%02d tc=%2d pc=%2d md=%d.%02d", i,
+					planet.Diameter,
+					planet.Gravity/100,
+					planet.Gravity%100,
+					planet.TemperatureClass,
+					planet.PressureClass,
+					planet.MiningDifficulty/100,
+					planet.MiningDifficulty%100)
+
+				if home_planet != nil {
+					fmt.Printf("%4d ", LSN(planet, home_planet))
+				} else {
+					fmt.Printf("  ")
+				}
+
+				num_gases := len(planet.Gases)
+				for i, gas := range planet.Gases {
+					if gas.Percentage > 0 {
+						if i > 0 {
+							fmt.Printf(",")
+						}
+						fmt.Printf("%s(%d%%)", gas.Type.Char(), gas.Percentage)
+					}
+				}
+				if num_gases == 0 {
+					fmt.Printf("No atmosphere")
+				}
+
+				fmt.Printf("\n")
+			}
+		}
+
+		if listPlanets {
+			fmt.Printf("\n")
+		}
+	}
+
+	if !listWormholes {
+		fmt.Printf("The galaxy has a radius of %d parsecs.\n", g.Radius)
+		fmt.Printf("It contains %d dwarf stars, %d degenerate stars, %d main sequence stars,\n", type_count[DWARF], type_count[DEGENERATE], type_count[MAIN_SEQUENCE])
+		fmt.Printf("    and %d giant stars, for a total of %d stars.\n", type_count[GIANT], g.NumberOfStars)
+		if listPlanets {
+			fmt.Printf("The total number of planets in the galaxy is %d.\n", total_planets)
+			fmt.Printf("The total number of natural wormholes in the galaxy is %d.\n", total_wormstars/2)
+			fmt.Printf("The galaxy was designed for %d species.\n", g.DNumSpecies)
+			fmt.Printf("A total of %d species have been designated so far.\n\n", g.NumSpecies)
+		}
+	}
+
+	/* Internal test. */
+	if g.NumberOfPlanets != total_planets {
+		return fmt.Errorf("WARNING!  Program error!  Internal inconsistency!")
+	}
+
+	return nil
 }
