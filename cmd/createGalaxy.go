@@ -45,7 +45,11 @@ The number of stars is based on the number of species, and will be somewhere bet
 		if err != nil {
 			return err
 		}
-		g, err := fh.GenerateGalaxy(numberOfSpecies)
+		lessCrowded, err := cmd.Flags().GetBool("less-crowded")
+		if err != nil {
+			return err
+		}
+		g, err := fh.GenerateGalaxy(numberOfSpecies, lessCrowded)
 		if err != nil {
 			return err
 		}
@@ -61,15 +65,7 @@ The number of stars is based on the number of species, and will be somewhere bet
 
 func init() {
 	createCmd.AddCommand(createGalaxyCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createGalaxyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
 	createGalaxyCmd.Flags().IntP("number-of-species", "n", 9, "number of species to create in the galaxy")
 	_ = createGalaxyCmd.MarkFlagRequired("number-of-species")
+	createGalaxyCmd.Flags().BoolP("less-crowded", "l", false, "create a less crowded galaxy")
 }

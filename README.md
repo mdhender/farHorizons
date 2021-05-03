@@ -63,10 +63,25 @@ If it does - regenerate.
 ## Commands
 
 ```sh
-$ fh create galaxy --number-of-species 8 ## NewGalaxy
-$ fh create homes                        ## MakeHomes
-$ fh set home-system --species 'Borgia' --system 'Foo' ## HomeSystem
-$ fh create species --name 'Borgia'      ## AddSpecies
+# run NewGalaxy
+# Galaxy size is calculated based on default star density and
+# fixed number of stars per race. Add the --less-crowded flag
+# to create a galaxy with more stars.
+$ fh create galaxy --number-of-species 8
+# run MakeHomes
+$ fh create homes
+# run ListGalaxy -p
+# check for duplicate systems
+$ fh list galaxy -p
+# run HomeSystemAuto
+$ fh set home-system --auto --species 'Borgia' --system 'Foo'
+# run AddSpecies
+$ fh create species --name 'Borgia'
+# run Finish
+$ fh run finish
+# run Report
+$ fh run report
+
 $ fh run no-orders                       ## NoOrders
 $ fh run combat                          ## Combat
 $ fh run pre-departure                   ## PreDeparture
@@ -77,7 +92,6 @@ $ fh run locations                       ## Locations
 $ fh run strike                          ## Strike
 $ fh run finish                          ## Finish
 $ fh run report                          ## Report
-$ fh list galaxy -p                      ## ListGalaxy -p
 $ fh map galaxy                          ## MapGalaxy
 $ fh show turn                           ## TurnNumber
 ```

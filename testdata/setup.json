@@ -1,0 +1,48 @@
+{
+  "setup": [
+    {
+      "email": "alderaan@example.com",
+      "sp_name": "Alderaan",
+      "home_planet_name": "Optimus",
+      "gov_name": "His Majesty",
+      "gov_type": "Degenerated Monarchy",
+      "ML": "10",
+      "GV": "1",
+      "LS": "1",
+      "BI": "3"
+    },
+    {
+      "email": "bantustan@example.com",
+      "sp_name": "Bantustan",
+      "home_planet_name": "The Nest",
+      "gov_name": "Greater One",
+      "gov_type": "Maternity",
+      "ML": "4",
+      "GV": "4",
+      "LS": "4",
+      "BI": "3"
+    },
+    {
+      "email": "charabon@example.com",
+      "sp_name": "Charabon",
+      "home_planet_name": "Nexus Eleven",
+      "gov_name": "High Council",
+      "gov_type": "Constitutional Republic",
+      "ML": "1",
+      "GV": "12",
+      "LS": "1",
+      "BI": "1"
+    },
+    {
+      "email": "doop@example.com",
+      "sp_name": "Doop'ov-aci",
+      "home_planet_name": "Baar'u'bomba",
+      "gov_name": "Token Holder",
+      "gov_type": "Bilateral Anarchy",
+      "ML": "1",
+      "GV": "1",
+      "LS": "6",
+      "BI": "7"
+    }
+  ]
+}

@@ -27,26 +27,44 @@ import (
 type GalaxyData struct {
 	Secret            string
 	DNumSpecies       int
+	LessCrowded       bool
 	NumSpecies        int
 	Radius            int
-	TurnNumber        int
+	NumberOfStars     int
 	NumberOfWormHoles int
+	TurnNumber        int
 	Stars             []*StarData
 }
 
-func GenerateGalaxy(ns int) (*GalaxyData, error) {
+func GenerateGalaxy(ns int, lessCrowded bool) (*GalaxyData, error) {
+	// seed random number generator
+	Seed(0xC0FFEE)
+
 	if ns < MIN_SPECIES || MAX_SPECIES < ns {
 		return nil, fmt.Errorf("number of species must be between %d and %d, inclusive", MIN_SPECIES, MAX_SPECIES)
 	}
-
 	d_num_species := ns
+	if lessCrowded {
+		// add 50% more species to the mix as a way to trick the program into adding more stars
+		d_num_species = (ns * 3) / 2
+		if MAX_SPECIES < d_num_species {
+			d_num_species = MAX_SPECIES
+		}
+	}
 
 	/* Get approximate number of star systems to generate. */
 	desired_num_stars := (d_num_species * STANDARD_NUMBER_OF_STAR_SYSTEMS) / STANDARD_NUMBER_OF_SPECIES
+	if lessCrowded {
+		desired_num_stars = (desired_num_stars * 3) / 2
+	}
 	if MAX_STARS < desired_num_stars {
 		return nil, fmt.Errorf("number of stars must be between 1 and %d, inclusive", MAX_STARS)
 	}
-	fmt.Printf("For %d species, a game needs about %d stars.\n", d_num_species, desired_num_stars)
+	if lessCrowded {
+		fmt.Printf("For %d species, a less crowded game needs about %d stars.\n", d_num_species, desired_num_stars)
+	} else {
+		fmt.Printf("For %d species, a game needs about %d stars.\n", d_num_species, desired_num_stars)
+	}
 
 	/* Get size of galaxy to generate. */
 	volume := desired_num_stars * STANDARD_GALACTIC_RADIUS * STANDARD_GALACTIC_RADIUS * STANDARD_GALACTIC_RADIUS / STANDARD_NUMBER_OF_STAR_SYSTEMS
@@ -76,9 +94,6 @@ func GenerateGalaxy(ns int) (*GalaxyData, error) {
 		}
 	}
 
-	/* Seed random number generator. */
-	Seed(0xC0FFEE)
-
 	// randomly place stars
 	for num_stars := 0; num_stars < desired_num_stars; {
 		// generate coordinates randomly
@@ -100,8 +115,8 @@ func GenerateGalaxy(ns int) (*GalaxyData, error) {
 
 	galaxy := &GalaxyData{
 		Secret:      "your-private-key-belongs-here",
-		DNumSpecies: d_num_species,
-		NumSpecies:  0,
+		DNumSpecies: ns,
+		LessCrowded: lessCrowded,
 		Radius:      galactic_radius,
 		TurnNumber:  0,
 	}
@@ -121,6 +136,7 @@ func GenerateGalaxy(ns int) (*GalaxyData, error) {
 			galaxy.Stars = append(galaxy.Stars, star)
 		}
 	}
+	galaxy.NumberOfStars = len(galaxy.Stars)
 
 	// generate natural wormholes
 	minWormholeLength := 20 // galactic_radius + 3 // in parsecs
