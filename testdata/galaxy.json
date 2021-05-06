@@ -519,7 +519,7 @@
         "Color": "orange",
         "Size": 5,
         "NumPlanets": 3,
-        "HomeSystem": false,
+        "HomeSystem": true,
         "WormHere": false,
         "WormX": 0,
         "WormY": 0,
@@ -535,66 +535,66 @@
         "Planets": [
           {
             "TemperatureClass": 12,
-            "PressureClass": 3,
+            "PressureClass": 7,
             "Special": "not-special",
             "Gases": [
               {
                 "Type": "Nitrogen",
-                "Percentage": 21
+                "Percentage": 22
               },
               {
                 "Type": "Carbon Dioxide",
-                "Percentage": 45
-              },
-              {
-                "Type": "Oxygen",
-                "Percentage": 13
-              },
-              {
-                "Type": "Hydrogen Chloride",
-                "Percentage": 21
+                "Percentage": 78
               }
             ],
-            "Diameter": 8,
-            "Density": 497,
-            "Gravity": 55,
-            "MiningDifficulty": 112,
+            "Diameter": 16,
+            "Density": 467,
+            "Gravity": 107,
+            "MiningDifficulty": 92,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
           },
           {
-            "TemperatureClass": 13,
-            "PressureClass": 11,
+            "TemperatureClass": 14,
+            "PressureClass": 13,
             "Special": "not-special",
             "Gases": [
               {
-                "Type": "Oxygen",
-                "Percentage": 100
+                "Type": "Nitrogen",
+                "Percentage": 85
+              },
+              {
+                "Type": "Carbon Dioxide",
+                "Percentage": 15
               }
             ],
-            "Diameter": 18,
-            "Density": 522,
-            "Gravity": 130,
-            "MiningDifficulty": 217,
+            "Diameter": 13,
+            "Density": 462,
+            "Gravity": 97,
+            "MiningDifficulty": 60,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
           },
           {
-            "TemperatureClass": 3,
-            "PressureClass": 14,
-            "Special": "not-special",
+            "TemperatureClass": 14,
+            "PressureClass": 13,
+            "Special": "ideal-home-planet",
             "Gases": [
               {
-                "Type": "Hydrogen",
-                "Percentage": 100
+                "Type": "Oxygen",
+                "Percentage": 18
+              },
+              {
+                "Type": "Nitrogen",
+                "Percentage": 82
               }
             ],
-            "Diameter": 112,
-            "Density": 141,
-            "Gravity": 219,
-            "MiningDifficulty": 807,
+            "Diameter": 12,
+            "Density": 108,
+            "Gravity": 104,
+            "MiningDifficulty": 212,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
@@ -609,7 +609,7 @@
         "Color": "yellow-white",
         "Size": 6,
         "NumPlanets": 7,
-        "HomeSystem": false,
+        "HomeSystem": true,
         "WormHere": false,
         "WormX": 0,
         "WormY": 0,
@@ -624,48 +624,105 @@
         "PlanetIndex": -1,
         "Planets": [
           {
-            "TemperatureClass": 10,
-            "PressureClass": 9,
+            "TemperatureClass": 27,
+            "PressureClass": 0,
+            "Special": "not-special",
+            "Gases": null,
+            "Diameter": 3,
+            "Density": 439,
+            "Gravity": 28,
+            "MiningDifficulty": 54,
+            "EconEfficiency": 0,
+            "MDIncrease": 0,
+            "Message": 0
+          },
+          {
+            "TemperatureClass": 13,
+            "PressureClass": 11,
             "Special": "not-special",
             "Gases": [
               {
-                "Type": "Ammonia",
-                "Percentage": 45
-              },
-              {
                 "Type": "Nitrogen",
                 "Percentage": 55
+              },
+              {
+                "Type": "Oxygen",
+                "Percentage": 45
               }
             ],
-            "Diameter": 8,
-            "Density": 444,
-            "Gravity": 49,
-            "MiningDifficulty": 123,
+            "Diameter": 13,
+            "Density": 402,
+            "Gravity": 81,
+            "MiningDifficulty": 60,
+            "EconEfficiency": 0,
+            "MDIncrease": 0,
+            "Message": 0
+          },
+          {
+            "TemperatureClass": 14,
+            "PressureClass": 3,
+            "Special": "not-special",
+            "Gases": [
+              {
+                "Type": "Carbon Dioxide",
+                "Percentage": 100
+              }
+            ],
+            "Diameter": 9,
+            "Density": 441,
+            "Gravity": 55,
+            "MiningDifficulty": 70,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
           },
           {
             "TemperatureClass": 10,
-            "PressureClass": 1,
-            "Special": "not-special",
+            "PressureClass": 11,
+            "Special": "ideal-home-planet",
             "Gases": [
               {
                 "Type": "Carbon Dioxide",
-                "Percentage": 33
+                "Percentage": 5
               },
               {
                 "Type": "Oxygen",
-                "Percentage": 19
+                "Percentage": 38
               },
               {
-                "Type": "Hydrogen Chloride",
-                "Percentage": 48
+                "Type": "Nitrogen",
+                "Percentage": 57
               }
             ],
-            "Diameter": 7,
-            "Density": 435,
-            "Gravity": 42,
+            "Diameter": 12,
+            "Density": 495,
+            "Gravity": 109,
+            "MiningDifficulty": 209,
+            "EconEfficiency": 0,
+            "MDIncrease": 0,
+            "Message": 0
+          },
+          {
+            "TemperatureClass": 9,
+            "PressureClass": 11,
+            "Special": "not-special",
+            "Gases": [
+              {
+                "Type": "Ammonia",
+                "Percentage": 60
+              },
+              {
+                "Type": "Nitrogen",
+                "Percentage": 13
+              },
+              {
+                "Type": "Oxygen",
+                "Percentage": 27
+              }
+            ],
+            "Diameter": 120,
+            "Density": 80,
+            "Gravity": 131,
             "MiningDifficulty": 176,
             "EconEfficiency": 0,
             "MDIncrease": 0,
@@ -673,7 +730,7 @@
           },
           {
             "TemperatureClass": 7,
-            "PressureClass": 1,
+            "PressureClass": 12,
             "Special": "not-special",
             "Gases": [
               {
@@ -681,72 +738,10 @@
                 "Percentage": 100
               }
             ],
-            "Diameter": 6,
-            "Density": 459,
-            "Gravity": 38,
-            "MiningDifficulty": 105,
-            "EconEfficiency": 0,
-            "MDIncrease": 0,
-            "Message": 0
-          },
-          {
-            "TemperatureClass": 3,
-            "PressureClass": 12,
-            "Special": "not-special",
-            "Gases": [
-              {
-                "Type": "Methane",
-                "Percentage": 100
-              }
-            ],
-            "Diameter": 27,
-            "Density": 498,
-            "Gravity": 186,
-            "MiningDifficulty": 308,
-            "EconEfficiency": 0,
-            "MDIncrease": 0,
-            "Message": 0
-          },
-          {
-            "TemperatureClass": 7,
-            "PressureClass": 11,
-            "Special": "not-special",
-            "Gases": [
-              {
-                "Type": "Nitrogen",
-                "Percentage": 65
-              },
-              {
-                "Type": "Carbon Dioxide",
-                "Percentage": 35
-              }
-            ],
-            "Diameter": 81,
-            "Density": 118,
-            "Gravity": 132,
-            "MiningDifficulty": 165,
-            "EconEfficiency": 0,
-            "MDIncrease": 0,
-            "Message": 0
-          },
-          {
-            "TemperatureClass": 4,
-            "PressureClass": 29,
-            "Special": "not-special",
-            "Gases": [
-              {
-                "Type": "Methane",
-                "Percentage": 91
-              },
-              {
-                "Type": "Helium",
-                "Percentage": 9
-              }
-            ],
-            "Diameter": 151,
-            "Density": 125,
-            "Gravity": 262,
-            "MiningDifficulty": 508,
+            "Diameter": 44,
+            "Density": 113,
+            "Gravity": 74,
+            "MiningDifficulty": 99,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
@@ -758,17 +753,17 @@
             "Gases": [
               {
                 "Type": "Hydrogen",
-                "Percentage": 37
+                "Percentage": 38
               },
               {
                 "Type": "Methane",
-                "Percentage": 63
+                "Percentage": 62
               }
             ],
-            "Diameter": 44,
-            "Density": 113,
-            "Gravity": 69,
-            "MiningDifficulty": 558,
+            "Diameter": 38,
+            "Density": 464,
+            "Gravity": 255,
+            "MiningDifficulty": 78,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
@@ -783,7 +778,7 @@
         "Color": "yellow-white",
         "Size": 5,
         "NumPlanets": 5,
-        "HomeSystem": false,
+        "HomeSystem": true,
         "WormHere": false,
         "WormX": 0,
         "WormY": 0,
@@ -798,80 +793,76 @@
         "PlanetIndex": -1,
         "Planets": [
           {
-            "TemperatureClass": 28,
+            "TemperatureClass": 20,
             "PressureClass": 0,
             "Special": "not-special",
             "Gases": null,
-            "Diameter": 6,
-            "Density": 506,
-            "Gravity": 42,
-            "MiningDifficulty": 101,
+            "Diameter": 9,
+            "Density": 537,
+            "Gravity": 59,
+            "MiningDifficulty": 81,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
           },
           {
-            "TemperatureClass": 6,
+            "TemperatureClass": 13,
+            "PressureClass": 9,
+            "Special": "ideal-home-planet",
+            "Gases": [
+              {
+                "Type": "Ammonia",
+                "Percentage": 24
+              },
+              {
+                "Type": "Oxygen",
+                "Percentage": 27
+              },
+              {
+                "Type": "Nitrogen",
+                "Percentage": 49
+              }
+            ],
+            "Diameter": 11,
+            "Density": 527,
+            "Gravity": 110,
+            "MiningDifficulty": 225,
+            "EconEfficiency": 0,
+            "MDIncrease": 0,
+            "Message": 0
+          },
+          {
+            "TemperatureClass": 12,
             "PressureClass": 11,
             "Special": "not-special",
             "Gases": [
               {
-                "Type": "Methane",
-                "Percentage": 61
-              },
-              {
-                "Type": "Ammonia",
-                "Percentage": 9
-              },
-              {
-                "Type": "Nitrogen",
-                "Percentage": 30
+                "Type": "Carbon Dioxide",
+                "Percentage": 100
               }
             ],
-            "Diameter": 15,
-            "Density": 507,
-            "Gravity": 105,
-            "MiningDifficulty": 103,
-            "EconEfficiency": 0,
-            "MDIncrease": 0,
-            "Message": 0
-          },
-          {
-            "TemperatureClass": 10,
-            "PressureClass": 10,
-            "Special": "not-special",
-            "Gases": [
-              {
-                "Type": "Oxygen",
-                "Percentage": 50
-              },
-              {
-                "Type": "Hydrogen Chloride",
-                "Percentage": 50
-              }
-            ],
-            "Diameter": 26,
-            "Density": 446,
-            "Gravity": 161,
-            "MiningDifficulty": 167,
+            "Diameter": 13,
+            "Density": 394,
+            "Gravity": 83,
+            "MiningDifficulty": 60,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
           },
           {
             "TemperatureClass": 7,
-            "PressureClass": 11,
+            "PressureClass": 12,
             "Special": "not-special",
             "Gases": [
               {
-                "Type": "Ammonia",
+                "Type": "Methane",
                 "Percentage": 100
               }
             ],
-            "Diameter": 100,
-            "Density": 158,
-            "Gravity": 219,
-            "MiningDifficulty": 754,
+            "Diameter": 43,
+            "Density": 69,
+            "Gravity": 52,
+            "MiningDifficulty": 117,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0
@@ -882,18 +873,14 @@
             "Special": "not-special",
             "Gases": [
               {
-                "Type": "Methane",
-                "Percentage": 80
-              },
-              {
-                "Type": "Helium",
-                "Percentage": 20
+                "Type": "Ammonia",
+                "Percentage": 100
               }
             ],
-            "Diameter": 42,
-            "Density": 130,
-            "Gravity": 75,
-            "MiningDifficulty": 283,
+            "Diameter": 58,
+            "Density": 97,
+            "Gravity": 79,
+            "MiningDifficulty": 215,
             "EconEfficiency": 0,
             "MDIncrease": 0,
             "Message": 0

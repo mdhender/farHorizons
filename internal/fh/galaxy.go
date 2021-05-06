@@ -208,6 +208,44 @@ func GetGalaxy(name string) (*GalaxyData, error) {
 	return &galaxy, nil
 }
 
+// GetFirstXYZ returns the first system that is not a home system
+// or has a worm hole or is within a given distance of any other home
+// system.
+func (g *GalaxyData) GetFirstXYZ(d int, forbidWormHoles bool) (int, int, int, error) {
+	minDSquared := d * d
+	var forbiddenSystems []*StarData
+	for _, star := range g.Stars {
+		if star.HomeSystem || (star.WormHere && forbidWormHoles) {
+			forbiddenSystems = append(forbiddenSystems, star)
+		}
+	}
+	for _, origin := range g.Stars {
+		if origin.HomeSystem || origin.WormHere || origin.NumPlanets < 3 {
+			continue
+		}
+		nearForbiddenSystem := false
+		for _, star := range forbiddenSystems {
+			if origin.DistanceSquaredTo(star) < minDSquared {
+				nearForbiddenSystem = true
+				break
+			}
+		}
+		if !nearForbiddenSystem {
+			return origin.X, origin.Y, origin.Z, nil
+		}
+	}
+	return 0, 0, 0, fmt.Errorf("all suitable systems are within %d parsecs of each other", d)
+}
+
+func (g *GalaxyData) GetStarAt(x, y, z int) (*StarData, error) {
+	for _, star := range g.Stars {
+		if star.At(x, y, z) {
+			return star, nil
+		}
+	}
+	return nil, fmt.Errorf("no star at %d, %d, %d", x, y, z)
+}
+
 func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
 	// initialize counts
 	total_planets := 0

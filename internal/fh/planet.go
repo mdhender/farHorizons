@@ -225,6 +225,29 @@ func GeneratePlanet(num_planets int) ([]*PlanetData, error) {
 	return planets, nil
 }
 
+func (p *PlanetData) Clone() *PlanetData {
+	var gases []*GasData
+	for _, gas := range p.Gases {
+		gases = append(gases, &GasData{
+			Type:       gas.Type,
+			Percentage: gas.Percentage,
+		})
+	}
+	return &PlanetData{
+		TemperatureClass: p.TemperatureClass,
+		PressureClass:    p.PressureClass,
+		Special:          p.Special,
+		Gases:            gases,
+		Diameter:         p.Diameter,
+		Density:          p.Density,
+		Gravity:          p.Gravity,
+		MiningDifficulty: p.MiningDifficulty,
+		EconEfficiency:   p.EconEfficiency,
+		MDIncrease:       p.MDIncrease,
+		Message:          p.Message,
+	}
+}
+
 // GenerateDensity
 // Density will depend on whether or not the planet is a gas giant.
 // Again ignoring Pluto, densities range from 0.7 to 1.6 times the density of water for the gas giants, and from 3.9 to 5.5 for the others.

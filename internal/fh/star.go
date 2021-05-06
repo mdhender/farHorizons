@@ -137,3 +137,76 @@ func GenerateStar(x, y, z int) (*StarData, error) {
 
 	return star, nil
 }
+
+func (s *StarData) At(x, y, z int) bool {
+	return s != nil && s.X == x && s.Y == y && s.Z == z
+}
+
+func (s *StarData) ConvertToHomeSystem(src []*PlanetData) {
+	// convert the system at the given coordinates
+	fmt.Printf("Converting system %d, %d, %d\n", s.X, s.Y, s.Z)
+
+	// update the star with values from the source template
+	for i, planet := range src {
+		s.Planets[i] = planet.Clone()
+	}
+
+	// make minor random changes to the planets
+	for _, planet := range s.Planets {
+		if planet.TemperatureClass == 0 {
+			// no changes
+		} else if planet.TemperatureClass > 12 {
+			planet.TemperatureClass -= rnd(3) - 1
+		} else {
+			planet.TemperatureClass += rnd(3) - 1
+		}
+		if planet.PressureClass == 0 {
+			// no changes
+		} else if planet.PressureClass > 12 {
+			planet.PressureClass -= rnd(3) - 1
+		} else {
+			planet.PressureClass += rnd(3) - 1
+		}
+		if len(planet.Gases) > 2 {
+			j := rnd(25) + 10
+			a, b := 1, 2
+			if planet.Gases[b].Percentage > 50 {
+				planet.Gases[a].Percentage += j
+				planet.Gases[b].Percentage -= j
+			} else if planet.Gases[a].Percentage > 50 {
+				planet.Gases[a].Percentage -= j
+				planet.Gases[b].Percentage += j
+			}
+		}
+		if planet.Diameter > 12 {
+			planet.Diameter -= rnd(3) - 1
+		} else {
+			planet.Diameter += rnd(3) - 1
+		}
+		if planet.Gravity > 100 {
+			planet.Gravity -= rnd(10)
+		} else {
+			planet.Gravity += rnd(10)
+		}
+		if planet.MiningDifficulty > 100 {
+			planet.MiningDifficulty -= rnd(10)
+		} else {
+			planet.MiningDifficulty += rnd(10)
+		}
+	}
+}
+
+func (s *StarData) DistanceSquaredTo(to *StarData) int {
+	deltaX, deltaY, deltaZ := s.X-to.X, s.Y-to.Y, s.Z-to.Z
+	return (deltaX)*(deltaX) + (deltaY)*(deltaY) + (deltaZ)*(deltaZ)
+}
+
+// returns number, not index
+func (s *StarData) HomePlanetNumber() int {
+	for i, planet := range s.Planets {
+		if planet.Special == IDEAL_HOME_PLANET {
+			return i + 1
+		}
+	}
+	return 0
+}
