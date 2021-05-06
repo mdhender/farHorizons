@@ -35,6 +35,9 @@ type GalaxyData struct {
 	NumberOfPlanets   int
 	TurnNumber        int
 	Stars             []*StarData
+	Templates         struct {
+		Homes [10][]*PlanetData
+	}
 }
 
 func GenerateGalaxy(ns int, lessCrowded bool) (*GalaxyData, error) {
@@ -331,5 +334,15 @@ func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
 		return fmt.Errorf("WARNING!  Program error!  Internal inconsistency!")
 	}
 
+	return nil
+}
+
+func (g *GalaxyData) Write(filename string) error {
+	if b, err := json.MarshalIndent(g, "  ", "  "); err != nil {
+		return err
+	} else if err := ioutil.WriteFile(filename, b, 0644); err != nil {
+		return err
+	}
+	fmt.Printf("Created %q.\n", filename)
 	return nil
 }

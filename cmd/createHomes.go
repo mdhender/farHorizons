@@ -19,62 +19,41 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/mdhender/farHorizons/internal/fh"
 	"github.com/spf13/cobra"
-	"io/ioutil"
 )
 
 // createHomesCmd implements the create homes command
 var createHomesCmd = &cobra.Command{
 	Use:   "homes",
 	Short: "Create home systems",
-	Long:  `The command line interface to create home systems.`,
+	Long: `This command creates the set of templates used to populate systems
+that have a home planet. It randomly populates a template for systems
+containing from 3 to 9 planets.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		name := "D:/GoLand/farHorizons/testdata/galaxy.json"
+		g, err := fh.GetGalaxy(name)
+		if err != nil {
+			return err
+		}
+
 		// seed random number generator
 		fh.Seed(0xC0FFEE)
 
-		//name := "D:/GoLand/farHorizons/testdata/galaxy.json"
-		if len(args) != 0 {
-			return fmt.Errorf("create homes: unknown arguments")
-		}
-
 		for num_planets := 3; num_planets < 10; num_planets++ {
-			filename := fmt.Sprintf("D:/GoLand/farHorizons/testdata/HS%d.json", num_planets)
-			fmt.Printf("Now doing file '%s'...\n", filename)
+			fmt.Printf("Creating home system with %d planets...\n", num_planets)
 			var planets []*fh.PlanetData
 			for planets == nil {
 				planets = fh.GenerateEarthLikePlanet(num_planets)
 			}
-			if data, err := json.MarshalIndent(&struct {
-				Name    string
-				Planets []*fh.PlanetData
-			}{
-				Name:    fmt.Sprintf("HS%d", num_planets),
-				Planets: planets,
-			}, "  ", "  "); err != nil {
-				return err
-			} else if err := ioutil.WriteFile(filename, data, 0644); err != nil {
-				return err
-			}
-			fmt.Printf("Created %q.\n", filename)
+			g.Templates.Homes[num_planets] = planets
 		}
 
-		return nil
+		return g.Write(name)
 	},
 }
 
 func init() {
 	createCmd.AddCommand(createHomesCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createHomesCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createHomesCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

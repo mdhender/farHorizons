@@ -19,11 +19,8 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/mdhender/farHorizons/internal/fh"
-	"io/ioutil"
-
 	"github.com/spf13/cobra"
 )
 
@@ -53,13 +50,7 @@ The number of stars is based on the number of species, and will be somewhere bet
 		if err != nil {
 			return err
 		}
-		if b, err := json.MarshalIndent(g, "  ", "  "); err != nil {
-			return err
-		} else if err := ioutil.WriteFile(name, b, 0644); err != nil {
-			return err
-		}
-		fmt.Printf("Created %q.\n", name)
-		return nil
+		return g.Write(name)
 	},
 }
 
