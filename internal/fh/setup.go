@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"strings"
 )
 
 type SetupData struct {
@@ -60,22 +61,70 @@ func GetSetup(name string) (*SetupData, error) {
 	if err := json.Unmarshal(data, &setup); err != nil {
 		return nil, err
 	}
+
+	if setup.Galaxy.MinimumDistance < 1 {
+		return nil, fmt.Errorf("minimum distance must be at least 1")
+	} else if setup.Galaxy.MinimumDistance > MAX_RADIUS {
+		return nil, fmt.Errorf("minimum distance must be less than %d", MAX_RADIUS)
+	}
+
 	emails := make(map[string]bool)
 	homePlanetName := make(map[string]bool)
 	speciesNames := make(map[string]bool)
 	for i, player := range setup.Players {
-		if exists := emails[player.Email]; exists {
+		if player.Email != strings.TrimSpace(player.Email) {
+			return nil, fmt.Errorf("player %d: email address must not have leading or trailing spaces", i+1)
+		} else if exists := emails[player.Email]; exists {
 			return nil, fmt.Errorf("player %d: duplicate email address %q", i+1, player.Email)
 		}
 		emails[player.Email] = true
-		if exists := homePlanetName[player.HomePlanetName]; exists {
-			return nil, fmt.Errorf("player %d: duplicate home planet name %q", i+1, player.HomePlanetName)
-		}
-		homePlanetName[player.HomePlanetName] = true
-		if exists := speciesNames[player.SpeciesName]; exists {
+
+		if player.SpeciesName != strings.TrimSpace(player.SpeciesName) {
+			return nil, fmt.Errorf("player %d: species name %q must not have leading or trailing spaces", i+1, player.SpeciesName)
+		} else if len(player.SpeciesName) < 5 {
+			return nil, fmt.Errorf("player %d: species name %q too short (min 5 chars required)", i+1, player.SpeciesName)
+		} else if len(player.SpeciesName) > 31 {
+			return nil, fmt.Errorf("player %d: species name %q too long (max 31 chars required)", i+1, player.SpeciesName)
+		} else if i := strings.IndexAny(player.SpeciesName, "$!`\"{}\\"); i != -1 {
+			return nil, fmt.Errorf("player %d: invalid character %q in species name", i+1, player.SpeciesName[i])
+		} else if exists := speciesNames[player.SpeciesName]; exists {
 			return nil, fmt.Errorf("player %d: duplicate species name %q", i+1, player.SpeciesName)
 		}
 		speciesNames[player.Email] = true
+
+		if player.HomePlanetName != strings.TrimSpace(player.HomePlanetName) {
+			return nil, fmt.Errorf("player %d: home planet name %q must not have leading or trailing spaces", i+1, player.HomePlanetName)
+		} else if player.HomePlanetName == "" {
+			return nil, fmt.Errorf("player %d: home planet name %q must not be blank", i+1, player.HomePlanetName)
+		} else if len(player.HomePlanetName) > 31 {
+			return nil, fmt.Errorf("player %d: home planet name %q too long (max 31 chars required)", i+1, player.HomePlanetName)
+		} else if i := strings.IndexAny(player.HomePlanetName, "$!`\"{}\\"); i != -1 {
+			return nil, fmt.Errorf("player %d: invalid character %q in home planet name", i+1, player.HomePlanetName[i])
+		} else if exists := homePlanetName[player.HomePlanetName]; exists {
+			return nil, fmt.Errorf("player %d: duplicate home planet name %q", i+1, player.HomePlanetName)
+		}
+		homePlanetName[player.HomePlanetName] = true
+
+		if player.GovName != strings.TrimSpace(player.GovName) {
+			return nil, fmt.Errorf("player %d: government name %q must not have leading or trailing spaces", i+1, player.GovName)
+		} else if player.GovName == "" {
+			return nil, fmt.Errorf("player %d: government name must not be blank", i+1)
+		} else if len(player.GovName) > 31 {
+			return nil, fmt.Errorf("player %d: government name %q too long (max 31 chars required)", i+1, player.GovName)
+		} else if i := strings.IndexAny(player.GovName, "$!`\"{}\\"); i != -1 {
+			return nil, fmt.Errorf("player %d: invalid character %q in home planet name", i+1, player.GovName[i])
+		}
+
+		if player.GovType != strings.TrimSpace(player.GovType) {
+			return nil, fmt.Errorf("player %d: government type %q must not have leading or trailing spaces", i+1, player.GovType)
+		} else if player.GovType == "" {
+			return nil, fmt.Errorf("player %d: government type must not be blank", i+1)
+		} else if len(player.GovType) > 31 {
+			return nil, fmt.Errorf("player %d: government type %q too long (max 31 chars required)", i+1, player.GovType)
+		} else if i := strings.IndexAny(player.GovType, "$!`\"{}\\"); i != -1 {
+			return nil, fmt.Errorf("player %d: invalid character %q in government type", i+1, player.GovType[i])
+		}
+
 		if player.BI+player.GV+player.LS+player.ML != 15 {
 			return nil, fmt.Errorf("player %d: the tech levels must sum to 15", i+1)
 		}

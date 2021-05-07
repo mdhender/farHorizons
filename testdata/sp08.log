@@ -1,0 +1,14 @@
+
+Scan of home star system for SP spName08:
+
+Coordinates:	x = 18	y = 39	z = 16	stellar type = dO8   5 planets.
+
+               Temp  Press Mining
+  #  Dia  Grav Class Class  Diff  LSN  Atmosphere
+ ---------------------------------------------------------------------
+  1    8  0.58  22     0    0.77   57  No atmosphere
+  2   11  1.10  13     9    2.18    0  NH3(24%),O2(27%),N2(49%)
+  3   15  0.90  13    11    0.63   12  CO2(100%)
+  4   44  0.43   5    12    1.20   36  CH4(100%)
+  5   56  0.85   3    12    2.23   42  NH3(100%)
+

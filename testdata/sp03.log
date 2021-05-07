@@ -1,0 +1,13 @@
+
+Scan of home star system for SP Charabon:
+
+Coordinates:	x = 9	y = 34	z = 20	stellar type =  G6   4 planets.
+
+               Temp  Press Mining
+  #  Dia  Grav Class Class  Diff  LSN  Atmosphere
+ ---------------------------------------------------------------------
+  1   11  0.76  30     0    0.61   87  No atmosphere
+  2   14  0.90  13    10    0.50   12  N2(5%),CO2(48%),HCl(47%)
+  3   12  0.93  13    11    2.13    0  O2(11%),N2(89%)
+  4   13  0.96   5     8    0.54   36  He(100%)
+

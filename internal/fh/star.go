@@ -18,24 +18,27 @@
 
 package fh
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+)
 
 type StarData struct {
-	X, Y, Z             int                    /* Coordinates. */
-	Type                StarType               /* Dwarf, degenerate, main sequence or giant. */ // was `type`
-	Color               StarColor              /* Star color. Blue, blue-white, etc. */
-	Size                int                    /* Star size, from 0 thru 9 inclusive. */
-	NumPlanets          int                    /* Number of usable planets in star system. */
-	HomeSystem          bool                   /* TRUE if this is a good potential home system. */
-	WormHere            bool                   /* TRUE if wormhole entry/exit. */
-	WormX, WormY, WormZ int                    /* Coordinates. */
-	Message             int                    /* Message associated with this star system, if any. */
-	VisitedBy           [NUM_CONTACT_WORDS]int /* A bit is set if corresponding species has been here. */
-	PlanetIndex         int                    /* Index (starting at zero) into the file "planets.dat" of the first planet in the star system. */
+	X, Y, Z             int       /* Coordinates. */
+	Type                StarType  /* Dwarf, degenerate, main sequence or giant. */ // was `type`
+	Color               StarColor /* Star color. Blue, blue-white, etc. */
+	Size                int       /* Star size, from 0 thru 9 inclusive. */
+	NumPlanets          int       /* Number of usable planets in star system. */
+	HomeSystem          bool      /* TRUE if this is a good potential home system. */
+	WormHere            bool      /* TRUE if wormhole entry/exit. */
+	WormX, WormY, WormZ int       /* Coordinates. */
+	Message             int       /* Message associated with this star system, if any. */
+	VisitedBy           []bool    /* A bit is set if corresponding species has been here. */
+	PlanetIndex         int       /* Index (starting at zero) into the file "planets.dat" of the first planet in the star system. */
 	Planets             []*PlanetData
 }
 
-func GenerateStar(x, y, z int) (*StarData, error) {
+func GenerateStar(x, y, z, nSpecies int) (*StarData, error) {
 	fmt.Printf("Generating star (%3d, %3d, %3d)\n", x, y, z)
 
 	/* Set coordinates. */
@@ -45,6 +48,7 @@ func GenerateStar(x, y, z int) (*StarData, error) {
 		Z:           z,
 		NumPlanets:  -2, // default value to initialize the planet generator
 		PlanetIndex: -1,
+		VisitedBy:   make([]bool, nSpecies+1, nSpecies+1),
 	}
 
 	/* Determine type of star. Make MAIN_SEQUENCE the most common star type. */
@@ -142,9 +146,9 @@ func (s *StarData) At(x, y, z int) bool {
 	return s != nil && s.X == x && s.Y == y && s.Z == z
 }
 
+// convert the system to a system with a home planet
 func (s *StarData) ConvertToHomeSystem(src []*PlanetData) {
-	// convert the system at the given coordinates
-	fmt.Printf("Converting system %d, %d, %d\n", s.X, s.Y, s.Z)
+	s.HomeSystem = true
 
 	// update the star with values from the source template
 	for i, planet := range src {
@@ -201,6 +205,16 @@ func (s *StarData) DistanceSquaredTo(to *StarData) int {
 	return (deltaX)*(deltaX) + (deltaY)*(deltaY) + (deltaZ)*(deltaZ)
 }
 
+// returns index, not number
+func (s *StarData) HomePlanetIndex() int {
+	for i, planet := range s.Planets {
+		if planet.Special == IDEAL_HOME_PLANET {
+			return i
+		}
+	}
+	return -1
+}
+
 // returns number, not index
 func (s *StarData) HomePlanetNumber() int {
 	for i, planet := range s.Planets {
@@ -209,4 +223,65 @@ func (s *StarData) HomePlanetNumber() int {
 		}
 	}
 	return 0
+}
+
+func (s *StarData) Scan(w io.Writer, species *SpeciesData) error {
+	/* Print data for star, */
+	fmt.Fprintf(w, "Coordinates:\tx = %d\ty = %d\tz = %d", s.X, s.Y, s.Z)
+	fmt.Fprintf(w, "\tstellar type = %s%s%d", s.Type.Char(), s.Color.Char(), s.Size)
+
+	fmt.Fprintf(w, "   %d planets.\n\n", s.NumPlanets)
+
+	if s.WormHere {
+		fmt.Fprintf(w, "This star system is the terminus of a natural wormhole.\n\n")
+	}
+
+	/* Print header. */
+	fmt.Fprintf(w, "               Temp  Press Mining\n")
+	fmt.Fprintf(w, "  #  Dia  Grav Class Class  Diff  LSN  Atmosphere\n")
+	fmt.Fprintf(w, " ---------------------------------------------------------------------\n")
+
+	/* Check for nova. */
+	if s.NumPlanets == 0 {
+		fmt.Fprintf(w, "\n\tThis star is a nova remnant. Any planets it may have once\n")
+		fmt.Fprintf(w, "\thad have been blown away.\n\n")
+		return nil
+	}
+
+	/* Print data for each planet. */
+	for i, planet := range s.Planets {
+		/* Get life support tech level needed. */
+		ls_needed := 99
+		if species != nil {
+			ls_needed = species.LifeSupportNeeded(planet)
+		}
+
+		fmt.Fprintf(w, "  %d  %3d  %d.%02d  %2d    %2d    %d.%02d %4d  ",
+			i+1, planet.Diameter,
+			planet.Gravity/100, planet.Gravity%100,
+			planet.TemperatureClass, planet.PressureClass,
+			planet.MiningDifficulty/100, planet.MiningDifficulty%100,
+			ls_needed)
+
+		if len(planet.Gases) == 0 {
+			fmt.Fprintf(w, "No atmosphere")
+		} else {
+			for n, gas := range planet.Gases {
+				if n > 0 {
+					fmt.Fprintf(w, ",")
+				}
+				fmt.Fprintf(w, "%s(%d%%)", gas.Type.Char(), gas.Percentage)
+			}
+		}
+
+		fmt.Fprintf(w, "\n")
+	}
+	if s.Message != 0 {
+		/* There is a message that must be logged whenever this star system is scanned. */
+		// TODO:
+		//sprintf(filename, "message%ld.txt\0", star->message);
+		//log_message(filename);
+	}
+
+	return nil
 }

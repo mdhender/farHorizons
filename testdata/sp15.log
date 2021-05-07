@@ -1,0 +1,14 @@
+
+Scan of home star system for SP spName15:
+
+Coordinates:	x = 29	y = 10	z = 9	stellar type =  A5   5 planets.
+
+               Temp  Press Mining
+  #  Dia  Grav Class Class  Diff  LSN  Atmosphere
+ ---------------------------------------------------------------------
+  1    9  0.54  22     0    0.78   57  No atmosphere
+  2   12  1.07  13     9    2.22    0  NH3(24%),O2(27%),N2(49%)
+  3   14  0.84  14     9    0.63    6  CO2(100%)
+  4   42  0.50   6    12    1.20   36  CH4(100%)
+  5   56  0.82   4    13    2.22   42  NH3(100%)
+

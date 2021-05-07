@@ -1,0 +1,13 @@
+
+Scan of home star system for SP spName14:
+
+Coordinates:	x = 28	y = 37	z = 30	stellar type =  A2   4 planets.
+
+               Temp  Press Mining
+  #  Dia  Grav Class Class  Diff  LSN  Atmosphere
+ ---------------------------------------------------------------------
+  1   12  0.73  30     0    0.55   87  No atmosphere
+  2   14  0.84  14    11    0.47    9  N2(5%),CO2(39%),HCl(56%)
+  3   12  0.96  13    11    2.15    0  O2(11%),N2(89%)
+  4   14  0.98   4     8    0.49   39  He(100%)
+

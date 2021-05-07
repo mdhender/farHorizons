@@ -37,6 +37,31 @@ type GasData struct {
 	Percentage int
 }
 
+type NamedPlanetData struct {
+	Name         string         /* Name of planet. */
+	X, Y, Z      int            // coordinates
+	PN           int            // planet number?
+	Status       uint64         // bitmask for Status of planet
+	Hiding       bool           /* HIDE order given. */
+	Hidden       bool           /* Colony is hidden. */
+	PlanetIndex  int            /* Index (starting at zero) into the file "planets.dat" of this planet. */
+	SiegeEff     int            /* Siege effectiveness - a percentage between 0 and 99. */
+	Shipyards    int            /* Number of shipyards on planet. */
+	IUsNeeded    int            /* Incoming ship with only CUs on board. */
+	AUsNeeded    int            /* Incoming ship with only CUs on board. */
+	AutoIUs      int            /* Number of IUs to be automatically installed. */
+	AutoAUs      int            /* Number of AUs to be automatically installed. */
+	IUsToInstall int            /* Colonial mining units to be installed. */
+	AUsToInstall int            /* Colonial manufacturing units to be installed. */
+	MIBase       int            /* Mining base times 10. */
+	MABase       int            /* Manufacturing base times 10. */
+	PopUnits     int            /* Number of available population units. */
+	ItemQuantity [MAX_ITEMS]int /* Quantity of each item available. */
+	UseOnAmbush  int            /* Amount to use on ambush. */
+	Message      int            /* Message associated with this planet, if any. */
+	Special      int            /* Different for each application. */
+}
+
 // Values for the planets of Earth's solar system will be used as starting values.
 // Diameters are in thousands of kilometers.
 // The zeroth element of each array is a placeholder and is not used.

@@ -7,48 +7,48 @@
     },
     "players": [
       {
-        "email": "email01.example.com",
-        "species_name": "spName01",
-        "home_planet_name": "hpName01",
-        "government_name": "gName01",
-        "government_type": "gType01",
-        "military_level": 2,
-        "gravitics_level": 3,
-        "life_support_level": 8,
-        "biology_level": 2
-      },
-      {
-        "email": "email02.example.com",
-        "species_name": "spName02",
-        "home_planet_name": "hpName02",
-        "government_name": "gName02",
-        "government_type": "gType02",
-        "military_level": 4,
-        "gravitics_level": 3,
-        "life_support_level": 4,
-        "biology_level": 4
-      },
-      {
-        "email": "email03.example.com",
-        "species_name": "spName03",
-        "home_planet_name": "hpName03",
-        "government_name": "gName03",
-        "government_type": "gType03",
-        "military_level": 3,
+        "email": "alderaan@example.com",
+        "species_name": "Alderaan",
+        "home_planet_name": "Optimus",
+        "government_name": "His Majesty",
+        "government_type": "Degenerated Monarchy",
+        "military_level": 10,
         "gravitics_level": 1,
-        "life_support_level": 4,
-        "biology_level": 7
+        "life_support_level": 1,
+        "biology_level": 3
       },
       {
-        "email": "email04.example.com",
-        "species_name": "spName04",
-        "home_planet_name": "hpName04",
-        "government_name": "gName04",
-        "government_type": "gType04",
+        "email": "bantustan@example.com",
+        "species_name": "Bantustan",
+        "home_planet_name": "The Nest",
+        "government_name": "Greater One",
+        "government_type": "Maternity",
         "military_level": 4,
-        "gravitics_level": 5,
-        "life_support_level": 2,
-        "biology_level": 4
+        "gravitics_level": 4,
+        "life_support_level": 4,
+        "biology_level": 3
+      },
+      {
+        "email": "charabon@example.com",
+        "species_name": "Charabon",
+        "home_planet_name": "Nexus Eleven",
+        "government_name": "High Council",
+        "government_type": "Constitutional Republic",
+        "military_level": 1,
+        "gravitics_level": 12,
+        "life_support_level": 1,
+        "biology_level": 1
+      },
+      {
+        "email": "doop@example.com",
+        "species_name": "Doop'ov-aci",
+        "home_planet_name": "Baar'u'bomba",
+        "government_name": "Token Holder",
+        "government_type": "Bilateral Anarchy",
+        "military_level": 1,
+        "gravitics_level": 1,
+        "life_support_level": 6,
+        "biology_level": 7
       },
       {
         "email": "email05.example.com",

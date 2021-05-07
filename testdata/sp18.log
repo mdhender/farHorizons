@@ -1,0 +1,12 @@
+
+Scan of home star system for SP spName18:
+
+Coordinates:	x = 32	y = 16	z = 34	stellar type =  A2   3 planets.
+
+               Temp  Press Mining
+  #  Dia  Grav Class Class  Diff  LSN  Atmosphere
+ ---------------------------------------------------------------------
+  1   17  1.06  13     6    0.91   24  N2(22%),CO2(78%)
+  2   14  1.03  12    11    0.62   12  N2(85%),CO2(15%)
+  3   13  1.07  13    12    2.15    0  O2(18%),N2(82%)
+

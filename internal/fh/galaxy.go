@@ -21,6 +21,7 @@ package fh
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 )
 
@@ -33,6 +34,7 @@ type GalaxyData struct {
 	NumberOfWormHoles int
 	NumberOfPlanets   int
 	TurnNumber        int
+	Species           []*SpeciesData
 	Stars             []*StarData
 	Templates         struct {
 		Homes [10][]*PlanetData
@@ -76,11 +78,11 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 		galactic_radius++
 	}
 	if setupData.Galaxy.Overrides.UseOverrides {
-		fmt.Printf("For %d stars, the galaxy should have a radius of about %d parsecs.\n", desired_num_stars, galactic_radius)
+		fmt.Printf("For %d stars, the galaxy should have a radius of about %d parsecs.", desired_num_stars, galactic_radius)
 		galactic_radius = setupData.Galaxy.Overrides.Radius
 	}
 	if galactic_radius < MIN_RADIUS || galactic_radius > MAX_RADIUS {
-		return nil, fmt.Errorf("radius must be between %d and %d parsecs, inclusiven", MIN_RADIUS, MAX_RADIUS)
+		return nil, fmt.Errorf("radius must be between %d and %d parsecs, inclusive", MIN_RADIUS, MAX_RADIUS)
 	}
 	galactic_diameter := 2 * galactic_radius
 
@@ -127,6 +129,7 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 		DNumSpecies: d_num_species,
 		Radius:      galactic_radius,
 		TurnNumber:  0,
+		Species:     make([]*SpeciesData, d_num_species+1, d_num_species+1),
 	}
 
 	for x := 0; x < galactic_diameter; x++ {
@@ -137,7 +140,7 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 				continue
 			}
 
-			star, err := GenerateStar(x, y, z)
+			star, err := GenerateStar(x, y, z, galaxy.DNumSpecies)
 			if err != nil {
 				return nil, err
 			}
@@ -377,6 +380,15 @@ func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
 	}
 
 	return nil
+}
+
+func (g *GalaxyData) Scan(w io.Writer, x, y, z int) error {
+	star, _ := g.GetStarAt(x, y, z)
+	if star == nil {
+		fmt.Fprintf(w, "Scan Report: There is no star system at x = %d, y = %d, z = %d.\n", x, y, z)
+		return nil
+	}
+	return star.Scan(w, nil)
 }
 
 func (g *GalaxyData) Write(filename string) error {
