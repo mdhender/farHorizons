@@ -26,27 +26,6 @@ import (
 	"io/ioutil"
 )
 
-type Setup struct {
-	Galaxy struct {
-		Name                  string `json:"name"`
-		LowDensity            bool   `json:"low_density"`
-		ForbidNearbyWormholes bool   `json:"forbid_nearby_wormholes"`
-		MinimumDistance       int    `json:"minimum_distance"`
-	} `json:"galaxy"`
-	Players []Player `json:"players"`
-}
-type Player struct {
-	Email          string `json:"email"`
-	SpName         string `json:"species_name"`
-	HomePlanetName string `json:"home_planet_name"`
-	GovName        string `json:"government_name"`
-	GovType        string `json:"government_type"`
-	ML             int    `json:"military_level"`
-	GV             int    `json:"gravitics_level"`
-	LS             int    `json:"life_support_level"`
-	BI             int    `json:"biology_level"`
-}
-
 // createSetupCmd implements the create setup command
 var createSetupCmd = &cobra.Command{
 	Use:   "setup",
@@ -88,7 +67,7 @@ filled out with player information.`,
 			return fmt.Errorf("number of players must be between %d and %d", fh.MIN_SPECIES, fh.MAX_SPECIES)
 		}
 
-		var s Setup
+		var s fh.Setup
 		s.Galaxy.Name = galaxyName
 		s.Galaxy.ForbidNearbyWormholes = forbidNearbyWormholes
 		s.Galaxy.LowDensity = lowDensity
@@ -107,7 +86,7 @@ filled out with player information.`,
 					bi++
 				}
 			}
-			s.Players = append(s.Players, Player{
+			s.Players = append(s.Players, fh.PlayerData{
 				Email:          fmt.Sprintf("email%02d.example.com", i),
 				SpName:         fmt.Sprintf("spName%02d", i),
 				HomePlanetName: fmt.Sprintf("hpName%02d", i),
