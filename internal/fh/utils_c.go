@@ -50,6 +50,11 @@ func rnd(max int) int {
 	return int((a*uint64(max))>>16) + 1
 }
 
+// Roll returns a random number in the range 1..n.
+func Roll(max int) int {
+	return rnd(max)
+}
+
 // Seed random number generator
 func Seed(seed uint64) {
 	last_random = seed
