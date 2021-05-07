@@ -39,7 +39,7 @@ systems.`,
 		if err != nil {
 			return err
 		}
-		forbidWormHoles, err := cmd.Flags().GetBool("forbid-worm-holes")
+		forbidNearbyWormholes, err := cmd.Flags().GetBool("forbid-nearby-wormholes")
 		if err != nil {
 			return err
 		}
@@ -124,7 +124,7 @@ systems.`,
 		systemsConverted := 0
 		for ; systemsToConvert > 0; systemsToConvert-- {
 			if oneSystem || allSystems || addUpTo != 0 {
-				x, y, z, err = g.GetFirstXYZ(minDistance, forbidWormHoles)
+				x, y, z, err = g.GetFirstXYZ(minDistance, forbidNearbyWormholes)
 				if err != nil {
 					return err
 				}
@@ -152,7 +152,7 @@ systems.`,
 func init() {
 	rootCmd.AddCommand(convertCmd)
 	convertCmd.Flags().Bool("all", false, "convert randomly picked systems, up to the species limit")
-	convertCmd.Flags().Bool("forbid-worm-holes", false, "forbid worm-holes to be neighbors")
+	convertCmd.Flags().Bool("forbid-nearby-wormholes", false, "forbid wormholes to be neighbors")
 	convertCmd.Flags().Bool("one", false, "convert one randomly picked system")
 	convertCmd.Flags().Bool("reset", false, "reset existing home systems first")
 	convertCmd.Flags().IntP("add-up-to", "n", 0, "add up to a maximum number of systems")
