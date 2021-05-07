@@ -47,7 +47,6 @@ type Player struct {
 	GV             int    `json:"gravitics_level"`
 	LS             int    `json:"life_support_level"`
 	BI             int    `json:"biology_level"`
-	Load           bool   `json:"load"`
 }
 
 // createSetupCmd implements the create setup command
@@ -81,7 +80,7 @@ filled out with player information.`,
 
 		var s Setup
 		s.Galaxy.Name = galaxyName
-		for i := 0; i < numberOfPlayers; i++ {
+		for i := 1; i <= numberOfPlayers; i++ {
 			ml, gv, ls, bi := 1, 1, 1, 1
 			for k := 5; k <= 15; k++ {
 				switch fh.Roll(4) {
@@ -105,7 +104,6 @@ filled out with player information.`,
 				GV:             gv,
 				LS:             ls,
 				BI:             bi,
-				Load:           false,
 			})
 		}
 		if b, err := json.MarshalIndent(s, "  ", "  "); err != nil {
