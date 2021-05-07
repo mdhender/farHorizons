@@ -1,11 +1,9 @@
 {
     "galaxy": {
       "name": "alpha",
-      "setup": {
-        "low_density": false,
-        "forbid_nearby_wormholes": false,
-        "minimum_distance": 0
-      }
+      "low_density": false,
+      "forbid_nearby_wormholes": false,
+      "minimum_distance": 10
     },
     "players": [
       {

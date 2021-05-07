@@ -28,12 +28,10 @@ import (
 
 type Setup struct {
 	Galaxy struct {
-		Name  string `json:"name"`
-		Setup struct {
-			LowDensity            bool `json:"low_density"`
-			ForbidNearbyWormholes bool `json:"forbid_nearby_wormholes"`
-			MinimumDistance       int  `json:"minimum_distance"`
-		} `json:"setup"`
+		Name                  string `json:"name"`
+		LowDensity            bool   `json:"low_density"`
+		ForbidNearbyWormholes bool   `json:"forbid_nearby_wormholes"`
+		MinimumDistance       int    `json:"minimum_distance"`
 	} `json:"galaxy"`
 	Players []Player `json:"players"`
 }
@@ -63,12 +61,24 @@ filled out with player information.`,
 		if filename == "" {
 			return fmt.Errorf("you must specify a valid file name to create")
 		}
+		forbidNearbyWormholes, err := cmd.Flags().GetBool("forbid-nearby-wormholes")
+		if err != nil {
+			return err
+		}
 		galaxyName, err := cmd.Flags().GetString("galaxy-name")
 		if err != nil {
 			return err
 		}
 		if galaxyName == "" {
 			return fmt.Errorf("you must specify a valid galaxy name")
+		}
+		lowDensity, err := cmd.Flags().GetBool("low-density")
+		if err != nil {
+			return err
+		}
+		minDistance, err := cmd.Flags().GetInt("minimum-distance")
+		if err != nil {
+			return err
 		}
 		numberOfPlayers, err := cmd.Flags().GetInt("number-of-players")
 		if err != nil {
@@ -80,6 +90,9 @@ filled out with player information.`,
 
 		var s Setup
 		s.Galaxy.Name = galaxyName
+		s.Galaxy.ForbidNearbyWormholes = forbidNearbyWormholes
+		s.Galaxy.LowDensity = lowDensity
+		s.Galaxy.MinimumDistance = minDistance
 		for i := 1; i <= numberOfPlayers; i++ {
 			ml, gv, ls, bi := 1, 1, 1, 1
 			for k := 5; k <= 15; k++ {
@@ -125,4 +138,7 @@ func init() {
 	_ = createSetupCmd.MarkFlagRequired("file-name")
 	createSetupCmd.Flags().IntP("number-of-players", "n", 0, "number of player entries to create")
 	_ = createSetupCmd.MarkFlagRequired("number-of-players")
+	createSetupCmd.Flags().Bool("forbid-nearby-wormholes", false, "forbid wormholes to be neighbors")
+	createSetupCmd.Flags().Bool("low-density", false, "increase the radius by 50%")
+	createSetupCmd.Flags().IntP("minimum-distance", "d", 10, "minimum distance between home systems")
 }
