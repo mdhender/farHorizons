@@ -97,7 +97,7 @@ systems.`,
 		fh.Seed(0xC0FFEE)
 
 		if reset {
-			for _, star := range g.Stars {
+			for _, star := range g.AllStars() {
 				if star.HomeSystem {
 					star.HomeSystem = false
 				}
@@ -107,14 +107,14 @@ systems.`,
 		systemsToConvert := 1
 		if addUpTo != 0 {
 			systemsToConvert = addUpTo
-			for _, star := range g.Stars {
+			for _, star := range g.AllStars() {
 				if star.HomeSystem {
 					systemsToConvert--
 				}
 			}
 		} else if allSystems {
 			systemsToConvert = g.DNumSpecies
-			for _, star := range g.Stars {
+			for _, star := range g.AllStars() {
 				if star.HomeSystem {
 					systemsToConvert--
 				}
@@ -132,9 +132,9 @@ systems.`,
 
 			// convert the system at the given coordinates
 			fmt.Printf("Converting system %d %d %d\n", x, y, z)
-			star, err := g.GetStarAt(x, y, z)
-			if err != nil {
-				return err
+			star := g.GetStarAt(x, y, z)
+			if star == nil {
+				return fmt.Errorf("there is no star at %d %d %d", x, y, z)
 			}
 
 			// fetch the home system template and update the star with values from the template

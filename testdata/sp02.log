@@ -1,18 +1,13 @@
 
 Scan of home star system for SP Bantustan:
 
-Coordinates:	x = 8	y = 17	z = 25	stellar type = gO1   9 planets.
+Coordinates:	x = 18	y = 36	z = 34	stellar type = gK4   4 planets.
 
                Temp  Press Mining
   #  Dia  Grav Class Class  Diff  LSN  Atmosphere
  ---------------------------------------------------------------------
-  1    8  0.46  16     0    0.53   51  No atmosphere
-  2   13  1.02  12    12    2.12    0  NH3(17%),O2(43%),N2(40%)
-  3   12  0.66  12     1    0.53   36  N2(7%),CO2(93%)
-  4    8  0.54   8    12    0.44   15  NH3(100%)
-  5   27  1.91   6    11    1.50   27  CH4(59%),CO2(41%)
-  6  206  2.62   6    29    0.50   72  NH3(85%),N2(15%)
-  7  123  1.03   5    11    4.75   30  CH4(100%)
-  8   65  0.97   8    13    0.58   18  NH3(15%),CO2(85%)
-  9   17  1.02   5    11    0.85   33  H2(83%),CH4(17%)
+  1   11  0.76  29     0    0.59   84  No atmosphere
+  2   14  0.90  14    10    0.53   15  N2(5%),CO2(44%),HCl(51%)
+  3   13  0.97  13    11    2.06    0  O2(11%),N2(89%)
+  4   15  0.98   4     7    0.47   42  He(100%)
 

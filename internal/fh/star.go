@@ -24,18 +24,24 @@ import (
 )
 
 type StarData struct {
-	X, Y, Z             int       /* Coordinates. */
-	Type                StarType  /* Dwarf, degenerate, main sequence or giant. */ // was `type`
-	Color               StarColor /* Star color. Blue, blue-white, etc. */
-	Size                int       /* Star size, from 0 thru 9 inclusive. */
-	NumPlanets          int       /* Number of usable planets in star system. */
-	HomeSystem          bool      /* TRUE if this is a good potential home system. */
-	WormHere            bool      /* TRUE if wormhole entry/exit. */
-	WormX, WormY, WormZ int       /* Coordinates. */
-	Message             int       /* Message associated with this star system, if any. */
-	VisitedBy           []bool    /* A bit is set if corresponding species has been here. */
-	PlanetIndex         int       /* Index (starting at zero) into the file "planets.dat" of the first planet in the star system. */
+	ID                  string          `json:"id"`
+	SystemNumber        int             `json:"system_number"` // one base index
+	X, Y, Z             int             /* Coordinates. */
+	Type                StarType        /* Dwarf, degenerate, main sequence or giant. */ // was `type`
+	Color               StarColor       /* Star color. Blue, blue-white, etc. */
+	Size                int             /* Star size, from 0 thru 9 inclusive. */
+	NumPlanets          int             /* Number of usable planets in star system. */
+	HomeSystem          bool            /* TRUE if this is a good potential home system. */
+	WormHere            bool            /* TRUE if wormhole entry/exit. */
+	WormX, WormY, WormZ int             /* Coordinates. */
+	Message             int             /* Message associated with this star system, if any. */
+	VisitedBy           map[string]bool `json:"visited_by"` // map of species id, true if corresponding species has been here.
+	PlanetIndex         int             /* Index (starting at zero) into the file "planets.dat" of the first planet in the star system. */
 	Planets             []*PlanetData
+}
+
+func XYZToID(x, y, z int) string {
+	return fmt.Sprintf("%03d/%03d/%03d", x, y, z)
 }
 
 func GenerateStar(x, y, z, nSpecies int) (*StarData, error) {
@@ -43,12 +49,13 @@ func GenerateStar(x, y, z, nSpecies int) (*StarData, error) {
 
 	/* Set coordinates. */
 	star := &StarData{
+		ID:          XYZToID(x, y, z),
 		X:           x,
 		Y:           y,
 		Z:           z,
 		NumPlanets:  -2, // default value to initialize the planet generator
 		PlanetIndex: -1,
-		VisitedBy:   make([]bool, nSpecies+1, nSpecies+1),
+		VisitedBy:   make(map[string]bool),
 	}
 
 	/* Determine type of star. Make MAIN_SEQUENCE the most common star type. */
@@ -134,7 +141,7 @@ func GenerateStar(x, y, z, nSpecies int) (*StarData, error) {
 
 	// generate planets
 	var err error
-	star.Planets, err = GeneratePlanet(star.NumPlanets)
+	star.Planets, err = GeneratePlanet(star.ID, star.NumPlanets)
 	if err != nil {
 		return nil, err
 	}

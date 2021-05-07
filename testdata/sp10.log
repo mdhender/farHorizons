@@ -1,18 +1,13 @@
 
 Scan of home star system for SP spName10:
 
-Coordinates:	x = 23	y = 2	z = 31	stellar type =  O6   9 planets.
+Coordinates:	x = 16	y = 7	z = 23	stellar type =  O3   4 planets.
 
                Temp  Press Mining
   #  Dia  Grav Class Class  Diff  LSN  Atmosphere
  ---------------------------------------------------------------------
-  1    8  0.41  16     0    0.49   42  No atmosphere
-  2   14  1.03  13    10    2.15    0  NH3(17%),O2(47%),N2(36%)
-  3   12  0.65  13     2    0.57   30  N2(7%),CO2(93%)
-  4    8  0.53   8    13    0.52   27  NH3(100%)
-  5   27  1.97   7    11    1.49   30  CH4(59%),CO2(41%)
-  6  207  2.63   6    27    0.51   75  NH3(85%),N2(15%)
-  7  121  1.07   7    12    4.76   30  CH4(100%)
-  8   64  1.01   8    13    0.58   30  NH3(15%),CO2(85%)
-  9   16  1.09   5    12    0.87   36  H2(83%),CH4(17%)
+  1   12  0.80  28     0    0.54   78  No atmosphere
+  2   12  0.83  14    11    0.44   21  N2(5%),CO2(42%),HCl(53%)
+  3   13  0.93  12     9    2.09    0  O2(11%),N2(89%)
+  4   15  1.00   3     6    0.51   39  He(100%)
 

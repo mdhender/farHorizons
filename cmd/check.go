@@ -51,17 +51,17 @@ var checkCmd = &cobra.Command{
 
 		if allChecks || duplicateStars {
 			stars := make(map[string]bool)
-			for i, star := range galaxy.Stars {
+			for _, star := range galaxy.AllStars() {
 				coords := fmt.Sprintf("%04d/%04d/%04d", star.X, star.Y, star.Z)
 				if ok := stars[coords]; ok {
-					errors = append(errors, fmt.Errorf("duplicate star %d: %s", i, coords))
+					errors = append(errors, fmt.Errorf("duplicate star %d %d %d", star.X, star.Y, star.Z))
 				}
 				stars[coords] = true
 			}
 		}
 
 		totalPlanets := 0
-		for _, star := range galaxy.Stars {
+		for _, star := range galaxy.AllStars() {
 			totalPlanets += len(star.Planets)
 		}
 		if galaxy.NumberOfPlanets != totalPlanets {

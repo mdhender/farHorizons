@@ -26,7 +26,11 @@ import (
 )
 
 type GalaxyData struct {
+	ID                string `json:"id"`
+	Name              string `json:"name"`
 	Secret            string
+	Players           map[string]*Player
+	Species           map[string]*SpeciesData
 	DNumSpecies       int
 	NumSpecies        int
 	Radius            int
@@ -34,14 +38,50 @@ type GalaxyData struct {
 	NumberOfWormHoles int
 	NumberOfPlanets   int
 	TurnNumber        int
-	Species           []*SpeciesData
-	Stars             []*StarData
+	Stars             map[string]*StarData
 	Templates         struct {
 		Homes [10][]*PlanetData
 	}
+	Translate struct {
+		EmailToID       map[string]string `json:"email_to_id"`
+		SpeciesNameToID map[string]string `json:"species_name_to_id"`
+		IndexToStarID   []string          `json:"index_to_star_id"`
+		XYZToID         map[string]string `json:"xyz_to_id"`
+	}
+	allStars []*StarData
+}
+
+type Player struct {
+	ID           string `json:"id"`
+	EmailAddress string `json:"email"`
+	Species      string `json:"species"`
 }
 
 func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
+	galaxy := &GalaxyData{
+		ID:      setupData.Galaxy.Name,
+		Name:    setupData.Galaxy.Name,
+		Secret:  "your-private-key-belongs-here",
+		Players: make(map[string]*Player),
+		Species: make(map[string]*SpeciesData),
+		Stars:   make(map[string]*StarData),
+	}
+	galaxy.Translate.EmailToID = make(map[string]string)
+	galaxy.Translate.SpeciesNameToID = make(map[string]string)
+	galaxy.Translate.XYZToID = make(map[string]string)
+
+	// initialize from some player data
+	for _, player := range setupData.Players {
+		id := player.Email
+		galaxy.Players[id] = &Player{
+			ID:           id,
+			EmailAddress: player.Email,
+			Species:      player.SpeciesName,
+		}
+		galaxy.Translate.EmailToID[id] = player.Email
+	}
+
+	// init?
 	d_num_species := len(setupData.Players)
 	if d_num_species < MIN_SPECIES || MAX_SPECIES < d_num_species {
 		return nil, fmt.Errorf("number of species must be between %d and %d, inclusive", MIN_SPECIES, MAX_SPECIES)
@@ -55,6 +95,7 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 			return nil, fmt.Errorf("adjusted number of species must be between %d and %d, inclusive", MIN_SPECIES, MAX_SPECIES)
 		}
 	}
+	galaxy.DNumSpecies = d_num_species
 
 	// get approximate number of star systems to generate
 	desired_num_stars := (adjusted_number_of_species * STANDARD_NUMBER_OF_STAR_SYSTEMS) / STANDARD_NUMBER_OF_SPECIES
@@ -85,6 +126,7 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 		return nil, fmt.Errorf("radius must be between %d and %d parsecs, inclusive", MIN_RADIUS, MAX_RADIUS)
 	}
 	galactic_diameter := 2 * galactic_radius
+	galaxy.Radius = galactic_radius
 
 	// get the number of cubic parsecs within a sphere with a radius of galactic_radius parsecs.
 	volume = (4 * 314 * galactic_radius * galactic_radius * galactic_radius) / 300
@@ -116,37 +158,20 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 			continue
 		}
 		// verify that we don't already have a star here
-		if star_here[x][y] != -1 {
+		if _, exists := galaxy.Stars[XYZToID(x, y, z)]; exists {
 			continue
 		}
 		// add the star at these coordinates
-		star_here[x][y] = z /* z-coordinate. */
+		star, err := GenerateStar(x, y, z, galaxy.DNumSpecies)
+		if err != nil {
+			return nil, err
+		}
+		star.SystemNumber = num_stars + 1
+		galaxy.Stars[star.ID] = star
+		galaxy.Translate.IndexToStarID = append(galaxy.Translate.IndexToStarID, star.ID)
 		num_stars++
 	}
 
-	galaxy := &GalaxyData{
-		Secret:      "your-private-key-belongs-here",
-		DNumSpecies: d_num_species,
-		Radius:      galactic_radius,
-		TurnNumber:  0,
-		Species:     make([]*SpeciesData, d_num_species+1, d_num_species+1),
-	}
-
-	for x := 0; x < galactic_diameter; x++ {
-		for y := 0; y < galactic_diameter; y++ {
-			// verify that we have a star at these coordinates
-			z := star_here[x][y]
-			if z == -1 {
-				continue
-			}
-
-			star, err := GenerateStar(x, y, z, galaxy.DNumSpecies)
-			if err != nil {
-				return nil, err
-			}
-			galaxy.Stars = append(galaxy.Stars, star)
-		}
-	}
 	galaxy.NumberOfStars = len(galaxy.Stars)
 
 	// generate natural wormholes
@@ -154,7 +179,7 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 	//if minWormholeLength > 20 {
 	//	minWormholeLength = 20
 	//}
-	for _, star := range galaxy.Stars {
+	for _, star := range galaxy.AllStars() {
 		if star.HomeSystem || star.WormHere || rnd(100) < 92 {
 			continue
 		}
@@ -162,7 +187,7 @@ func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
 		// we want to put a wormhole here if we can find a star at least that minimum distance away that doesn't already have a worm hole
 		var worm_star *StarData
 		for k, f := 0, rnd(desired_num_stars); k < desired_num_stars && worm_star == nil; k++ {
-			ps := galaxy.Stars[(k+f)%desired_num_stars]
+			ps := galaxy.Stars[galaxy.Translate.IndexToStarID[(k+f)%len(galaxy.Translate.IndexToStarID)]]
 			if ps == star || ps.HomeSystem || ps.WormHere {
 				continue
 			}
@@ -215,19 +240,30 @@ func GetGalaxy(name string) (*GalaxyData, error) {
 	return &galaxy, nil
 }
 
+func (g *GalaxyData) AllStars() []*StarData {
+	stars := g.allStars
+	if len(stars) != len(g.Translate.IndexToStarID) {
+		stars = make([]*StarData, len(g.Translate.IndexToStarID), len(g.Translate.IndexToStarID))
+		for i, id := range g.Translate.IndexToStarID {
+			stars[i] = g.GetStarByID(id)
+		}
+	}
+	return stars
+}
+
 // GetFirstXYZ returns the first system that is not a home system
 // or has a worm hole or is within a given distance of any other home
 // system.
 func (g *GalaxyData) GetFirstXYZ(d int, forbidWormHoles bool) (int, int, int, error) {
 	minDSquared := d * d
 	var forbiddenSystems []*StarData
-	for _, star := range g.Stars {
+	for _, star := range g.AllStars() {
 		if star.HomeSystem || (star.WormHere && forbidWormHoles) {
 			forbiddenSystems = append(forbiddenSystems, star)
 		}
 	}
-	for _, origin := range g.Stars {
-		if origin.HomeSystem || origin.WormHere || origin.NumPlanets < 3 {
+	for _, origin := range g.AllStars() {
+		if origin == nil || origin.HomeSystem || origin.WormHere || origin.NumPlanets < 3 {
 			continue
 		}
 		nearForbiddenSystem := false
@@ -244,13 +280,24 @@ func (g *GalaxyData) GetFirstXYZ(d int, forbidWormHoles bool) (int, int, int, er
 	return 0, 0, 0, fmt.Errorf("all suitable systems are within %d parsecs of each other", d)
 }
 
-func (g *GalaxyData) GetStarAt(x, y, z int) (*StarData, error) {
-	for _, star := range g.Stars {
-		if star.At(x, y, z) {
-			return star, nil
-		}
+func (g *GalaxyData) GetSpeciesByID(id string) *SpeciesData {
+	return g.Species[id]
+}
+
+func (g *GalaxyData) GetSpeciesByName(name string) *SpeciesData {
+	id, ok := g.Translate.SpeciesNameToID[name]
+	if !ok {
+		return nil
 	}
-	return nil, fmt.Errorf("no star at %d, %d, %d", x, y, z)
+	return g.GetSpeciesByID(id)
+}
+
+func (g *GalaxyData) GetStarAt(x, y, z int) *StarData {
+	return g.Stars[XYZToID(x, y, z)]
+}
+
+func (g *GalaxyData) GetStarByID(id string) *StarData {
+	return g.Stars[id]
 }
 
 func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
@@ -263,10 +310,10 @@ func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
 	}
 
 	// for each star, list info
-	for star_index, star := range g.Stars {
+	for _, star := range g.AllStars() {
 		if !listWormholes {
 			if listPlanets {
-				fmt.Printf("System #%d:\t", star_index+1)
+				fmt.Printf("System #%d:\t", star.SystemNumber)
 			}
 			fmt.Printf("x = %d\ty = %d\tz = %d", star.X, star.Y, star.Z)
 			fmt.Printf("\tstellar type = %s%s%s", star.Type.Char(), star.Color.Char(), StarSizeChar[star.Size])
@@ -276,7 +323,7 @@ func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
 			fmt.Printf("\n")
 
 			if star.NumPlanets == 0 {
-				fmt.Printf("\tStar #%d went nova!", star_index+1)
+				fmt.Printf("\tStar #%d went nova!", star.SystemNumber)
 				fmt.Printf(" All planets were blown away!\n")
 			} else if star.NumPlanets != len(star.Planets) {
 				return fmt.Errorf("assert(numPlanets == lenPlanets)")
@@ -293,11 +340,9 @@ func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
 			} else if listWormholes {
 				fmt.Printf("Wormhole #%d: from %d %d %d to %d %d %d\n", total_wormstars, star.X, star.Y, star.Z, star.WormX, star.WormY, star.WormZ)
 				// turn off the target's worm flag to avoid double-reporting
-				for _, worm_star := range g.Stars {
-					if star.WormX == worm_star.X && star.WormY == worm_star.Y && star.WormZ == worm_star.Z {
-						worm_star.WormHere = false
-						break
-					}
+				wormSystem := g.GetStarAt(star.WormX, star.WormY, star.WormZ)
+				if wormSystem != nil {
+					wormSystem.WormHere = false
 				}
 			}
 		}
@@ -383,7 +428,7 @@ func (g *GalaxyData) List(listPlanets, listWormholes bool) error {
 }
 
 func (g *GalaxyData) Scan(w io.Writer, x, y, z int) error {
-	star, _ := g.GetStarAt(x, y, z)
+	star := g.GetStarAt(x, y, z)
 	if star == nil {
 		fmt.Fprintf(w, "Scan Report: There is no star system at x = %d, y = %d, z = %d.\n", x, y, z)
 		return nil

@@ -18,9 +18,12 @@
 
 package fh
 
+import "fmt"
+
 type PlanetData struct {
-	TemperatureClass int /* Temperature class, 1-30. */
-	PressureClass    int /* Pressure class, 0-29. */
+	ID               string `json:"id"`
+	TemperatureClass int    /* Temperature class, 1-30. */
+	PressureClass    int    /* Pressure class, 0-29. */
 	Special          PlanetSpecialType
 	Gases            []*GasData /* Gas in atmosphere. Nil if none. */
 	Diameter         int        /* Diameter in thousands of kilometers. */
@@ -38,6 +41,7 @@ type GasData struct {
 }
 
 type NamedPlanetData struct {
+	ID           string         `json:"id"`
 	Name         string         /* Name of planet. */
 	X, Y, Z      int            // coordinates
 	PN           int            // planet number?
@@ -56,10 +60,10 @@ type NamedPlanetData struct {
 	MIBase       int            /* Mining base times 10. */
 	MABase       int            /* Manufacturing base times 10. */
 	PopUnits     int            /* Number of available population units. */
-	ItemQuantity [MAX_ITEMS]int /* Quantity of each item available. */
 	UseOnAmbush  int            /* Amount to use on ambush. */
 	Message      int            /* Message associated with this planet, if any. */
 	Special      int            /* Different for each application. */
+	ItemQuantity [MAX_ITEMS]int /* Quantity of each item available. */
 }
 
 // Values for the planets of Earth's solar system will be used as starting values.
@@ -82,7 +86,7 @@ var earth = []struct{ diameter, temperatureClass int }{
 
 // GenerateEarthLikePlanet will try to random generate a set of planets
 // that contains one Earth-like planet. If it can't, it will return nil.
-func GenerateEarthLikePlanet(num_planets int) []*PlanetData {
+func GenerateEarthLikePlanet(starId string, num_planets int) []*PlanetData {
 	// set flag to indicate this star system requires an earth-like planet.
 	// We will reset it after we have created one.
 	make_earth := true
@@ -92,7 +96,7 @@ func GenerateEarthLikePlanet(num_planets int) []*PlanetData {
 
 	/* Main loop. Generate one planet at a time. */
 	for planet_number := 1; planet_number <= num_planets; planet_number++ {
-		planet := &PlanetData{}
+		planet := &PlanetData{ID: fmt.Sprintf("%s-%02d", starId, planet_number)}
 		planets = append(planets, planet)
 
 		/* Start with diameters, temperature classes and pressure classes based on the planets in Earth's solar system. */
@@ -196,12 +200,12 @@ func GenerateEarthLikePlanet(num_planets int) []*PlanetData {
 	return planets
 }
 
-func GeneratePlanet(num_planets int) ([]*PlanetData, error) {
+func GeneratePlanet(starId string, num_planets int) ([]*PlanetData, error) {
 	var planets []*PlanetData
 
 	/* Main loop. Generate one planet at a time. */
 	for planet_number := 1; planet_number <= num_planets; planet_number++ {
-		planet := &PlanetData{}
+		planet := &PlanetData{ID: fmt.Sprintf("%s-%02d", starId, planet_number)}
 		planets = append(planets, planet)
 
 		/* Start with diameters, temperature classes and pressure classes based on the planets in Earth's solar system. */

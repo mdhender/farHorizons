@@ -1,13 +1,13 @@
 
 Scan of home star system for SP spName09:
 
-Coordinates:	x = 22	y = 19	z = 7	stellar type =  G9   4 planets.
+Coordinates:	x = 27	y = 19	z = 42	stellar type = gK4   4 planets.
 
                Temp  Press Mining
   #  Dia  Grav Class Class  Diff  LSN  Atmosphere
  ---------------------------------------------------------------------
-  1   13  0.72  28     0    0.60   75  No atmosphere
-  2   13  0.85  13     9    0.46    6  N2(5%),CO2(48%),HCl(47%)
-  3   12  0.93  13     9    2.13    0  O2(11%),N2(89%)
-  4   13  0.99   5     8    0.47   30  He(100%)
+  1   12  0.77  28     0    0.63   72  No atmosphere
+  2   14  0.84  13    11    0.50   15  N2(5%),CO2(56%),HCl(39%)
+  3   14  0.97  14     9    2.09    0  O2(11%),N2(89%)
+  4   15  0.98   3     6    0.51   45  He(100%)
 

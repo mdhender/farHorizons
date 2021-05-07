@@ -1,12 +1,12 @@
 
 Scan of home star system for SP spName06:
 
-Coordinates:	x = 15	y = 3	z = 16	stellar type =  K0   3 planets.
+Coordinates:	x = 18	y = 33	z = 6	stellar type =  A8   3 planets.
 
                Temp  Press Mining
   #  Dia  Grav Class Class  Diff  LSN  Atmosphere
  ---------------------------------------------------------------------
-  1   17  1.06  12     8    0.86   18  N2(22%),CO2(78%)
-  2   15  1.04  12    13    0.61    9  N2(85%),CO2(15%)
-  3   12  1.04  12    12    2.10    0  O2(18%),N2(82%)
+  1   17  1.01  12     6    0.92   24  N2(22%),CO2(78%)
+  2   14  0.97  13    12    0.61    9  N2(85%),CO2(15%)
+  3   11  1.07  12    12    2.08    0  O2(18%),N2(82%)
 

@@ -69,7 +69,7 @@ configuration file, then creates a new galaxy file.`,
 			fmt.Printf("Creating home system with %d planets...\n", num_planets)
 			var planets []*fh.PlanetData
 			for planets == nil {
-				planets = fh.GenerateEarthLikePlanet(num_planets)
+				planets = fh.GenerateEarthLikePlanet(fmt.Sprintf("homes/%02d", num_planets), num_planets)
 			}
 			g.Templates.Homes[num_planets] = planets
 		}
@@ -78,8 +78,10 @@ configuration file, then creates a new galaxy file.`,
 
 		for i, player := range setupData.Players {
 			var spec fh.SpeciesData
+			spec.ID = fmt.Sprintf("%02d", i+1)
 			spec.Number = i + 1
 			spec.Name = player.SpeciesName
+			g.Translate.SpeciesNameToID[spec.Name] = spec.ID
 			spec.HomeNampla = &fh.NamedPlanetData{}
 
 			home_nampla := spec.HomeNampla
@@ -95,9 +97,9 @@ configuration file, then creates a new galaxy file.`,
 				return err
 			}
 			// convert the system at those coordinates to a home system
-			star, err := g.GetStarAt(x, y, z)
-			if err != nil {
-				return err
+			star := g.GetStarAt(x, y, z)
+			if star == nil {
+				return fmt.Errorf("There is no star at %d %d %d", x, y, z)
 			}
 			// fetch the home system template and update the star with values from the template
 			star.ConvertToHomeSystem(g.Templates.Homes[star.NumPlanets])
@@ -236,17 +238,17 @@ configuration file, then creates a new galaxy file.`,
 				fh.TechName[fh.ML], spec.TechLevel[fh.BI])
 
 			fmt.Printf("\n\n\tFor this species, the required gas is %s (%d%%-%d%%).\n",
-				spec.RequiredGas.String(),
+				spec.RequiredGas.Char(),
 				spec.RequiredGasMin, spec.RequiredGasMax)
 
 			fmt.Printf("\tGases neutral to species:")
 			for _, gasType := range spec.NeutralGas {
-				fmt.Printf(" %s ", gasType.String())
+				fmt.Printf(" %s ", gasType.Char())
 			}
 
 			fmt.Printf("\n\tGases poisonous to species:")
 			for _, gasType := range spec.PoisonGas {
-				fmt.Printf(" %s ", gasType.String())
+				fmt.Printf(" %s ", gasType.Char())
 			}
 
 			fmt.Printf("\n\n\tInitial mining base = %d.%d. Initial manufacturing base = %d.%d.\n",
@@ -258,9 +260,9 @@ configuration file, then creates a new galaxy file.`,
 				(spec.TechLevel[fh.MA]*home_nampla.MABase)/10)
 
 			// set visited_by bit in star data
-			star.VisitedBy[spec.Number] = true
+			star.VisitedBy[spec.ID] = true
 
-			g.Species[spec.Number] = &spec
+			g.Species[spec.ID] = &spec
 
 			/* Create log file for first turn. Write home star system data to it. */
 			logFile := fmt.Sprintf("D:/GoLand/farHorizons/testdata/sp%02d.log", spec.Number)

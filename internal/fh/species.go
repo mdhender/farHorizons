@@ -19,6 +19,7 @@
 package fh
 
 type SpeciesData struct {
+	ID               string      `json:"id"`
 	Number           int         // one-based index of species
 	Name             string      // Name of species.
 	GovtName         string      // Name of government.

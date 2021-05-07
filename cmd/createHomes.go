@@ -45,7 +45,7 @@ containing from 3 to 9 planets.`,
 			fmt.Printf("Creating home system with %d planets...\n", num_planets)
 			var planets []*fh.PlanetData
 			for planets == nil {
-				planets = fh.GenerateEarthLikePlanet(num_planets)
+				planets = fh.GenerateEarthLikePlanet("sand", num_planets)
 			}
 			g.Templates.Homes[num_planets] = planets
 		}
