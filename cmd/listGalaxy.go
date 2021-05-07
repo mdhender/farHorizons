@@ -30,11 +30,12 @@ var listGalaxyCmd = &cobra.Command{
 	Short: "list galaxy properties",
 	Long:  `List details about the galaxy, writing the results to stdout.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		name := "D:/GoLand/farHorizons/testdata/galaxy.json"
-		if len(args) != 0 {
-			return fmt.Errorf("list galaxy: unknown arguments")
+		galaxyFileName, err := cmd.Flags().GetString("galaxy-file")
+		if err != nil {
+			return err
+		} else if galaxyFileName == "" {
+			return fmt.Errorf("you must specify a galaxy file to list")
 		}
-
 		listPlanets, listWormholes := true, false
 		noListPlanets, err := cmd.Flags().GetBool("no-list-planets")
 		if err != nil {
@@ -53,7 +54,7 @@ var listGalaxyCmd = &cobra.Command{
 		}
 
 		// load all the data
-		galaxy, err := fh.GetGalaxy(name)
+		galaxy, err := fh.GetGalaxy(galaxyFileName)
 		if err != nil {
 			return err
 		}
@@ -68,6 +69,8 @@ var listGalaxyCmd = &cobra.Command{
 
 func init() {
 	listCmd.AddCommand(listGalaxyCmd)
+	listGalaxyCmd.Flags().StringP("galaxy-file", "g", "", "name of galaxy file to list")
+	_ = listCmd.MarkFlagRequired("galaxy-file")
 	listGalaxyCmd.Flags().BoolP("no-list-planets", "p", false, "do not list planets")
 	listGalaxyCmd.Flags().BoolP("only-wormholes", "w", false, "list only wormholes")
 }
