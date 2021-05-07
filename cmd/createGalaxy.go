@@ -57,6 +57,16 @@ configuration file, then creates a new galaxy file.`,
 		if err != nil {
 			return err
 		}
+
+		for num_planets := 3; num_planets < 10; num_planets++ {
+			fmt.Printf("Creating home system with %d planets...\n", num_planets)
+			var planets []*fh.PlanetData
+			for planets == nil {
+				planets = fh.GenerateEarthLikePlanet(num_planets)
+			}
+			g.Templates.Homes[num_planets] = planets
+		}
+
 		err = g.Write(galaxyFileName)
 		if err != nil {
 			return err
