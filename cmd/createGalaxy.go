@@ -22,41 +22,55 @@ import (
 	"fmt"
 	"github.com/mdhender/farHorizons/internal/fh"
 	"github.com/spf13/cobra"
+	"time"
 )
 
 // createGalaxyCmd implements the create galaxy command
 var createGalaxyCmd = &cobra.Command{
 	Use:   "galaxy",
-	Short: "A galaxy manager?",
-	Long: `The command line interface to manage a galaxy.
-
-The number of species must be between ` + fmt.Sprintf("%d and %d", fh.MIN_SPECIES, fh.MAX_SPECIES) + `, inclusive.
-
-The number of stars is based on the number of species, and will be somewhere between ` + fmt.Sprintf("%d and %d", fh.MIN_STARS, fh.MAX_STARS) + `.`,
+	Short: "Create a new galaxy",
+	Long: `This commands loads setup data from a
+configuration file, then creates a new galaxy file.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		name := "D:/GoLand/farHorizons/testdata/galaxy.json"
-		if len(args) != 0 {
-			return fmt.Errorf("create galaxy: unknown arguments")
+		started := time.Now()
+		fh.Seed(0xC0FFEE) // seed random number generator
+
+		galaxyFileName, err := cmd.Flags().GetString("galaxy-file")
+		if err != nil {
+			return err
+		} else if galaxyFileName == "" {
+			return fmt.Errorf("you must specify a valid file name to create")
 		}
-		numberOfSpecies, err := cmd.Flags().GetInt("number-of-species")
+		setupFileName, err := cmd.Flags().GetString("setup-file")
+		if err != nil {
+			return err
+		} else if setupFileName == "" {
+			return fmt.Errorf("you must specify a valid setup file name")
+		}
+
+		setupData, err := fh.GetSetup(setupFileName)
 		if err != nil {
 			return err
 		}
-		lessCrowded, err := cmd.Flags().GetBool("less-crowded")
+
+		g, err := fh.GenerateGalaxy(setupData)
 		if err != nil {
 			return err
 		}
-		g, err := fh.GenerateGalaxy(numberOfSpecies, lessCrowded)
+		err = g.Write(galaxyFileName)
 		if err != nil {
 			return err
 		}
-		return g.Write(name)
+
+		fmt.Printf("Created file %q in %v\n", galaxyFileName, time.Now().Sub(started))
+		return nil
 	},
 }
 
 func init() {
 	createCmd.AddCommand(createGalaxyCmd)
-	createGalaxyCmd.Flags().IntP("number-of-species", "n", 9, "number of species to create in the galaxy")
-	_ = createGalaxyCmd.MarkFlagRequired("number-of-species")
-	createGalaxyCmd.Flags().BoolP("less-crowded", "l", false, "create a less crowded galaxy")
+	createGalaxyCmd.Flags().StringP("galaxy-file", "g", "", "name of galaxy file to create")
+	_ = createGalaxyCmd.MarkFlagRequired("galaxy-file")
+	createGalaxyCmd.Flags().StringP("setup-file", "i", "", "name of configuration file to load")
+	_ = createGalaxyCmd.MarkFlagRequired("setup-file")
 }

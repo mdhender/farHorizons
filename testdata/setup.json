@@ -1,48 +1,208 @@
 {
-  "setup": [
+  "galaxy": {
+    "name": "The Return",
+    "low_density": false,
+    "forbid_nearby_wormholes": false,
+    "minimum_distance": 0
+  },
+  "player": [
     {
       "email": "alderaan@example.com",
-      "sp_name": "Alderaan",
+      "species_name": "Alderaan",
       "home_planet_name": "Optimus",
-      "gov_name": "His Majesty",
-      "gov_type": "Degenerated Monarchy",
-      "ML": "10",
-      "GV": "1",
-      "LS": "1",
-      "BI": "3"
+      "government_name": "His Majesty",
+      "government_type": "Degenerated Monarchy",
+      "military_level": "10",
+      "gravitics_level": "1",
+      "life_support_level": "1",
+      "biology_level": "3"
     },
     {
       "email": "bantustan@example.com",
-      "sp_name": "Bantustan",
+      "species_name": "Bantustan",
       "home_planet_name": "The Nest",
-      "gov_name": "Greater One",
-      "gov_type": "Maternity",
-      "ML": "4",
-      "GV": "4",
-      "LS": "4",
-      "BI": "3"
+      "government_name": "Greater One",
+      "government_type": "Maternity",
+      "military_level": "4",
+      "gravitics_level": "4",
+      "life_support_level": "4",
+      "biology_level": "3"
     },
     {
       "email": "charabon@example.com",
-      "sp_name": "Charabon",
+      "species_name": "Charabon",
       "home_planet_name": "Nexus Eleven",
-      "gov_name": "High Council",
-      "gov_type": "Constitutional Republic",
-      "ML": "1",
-      "GV": "12",
-      "LS": "1",
-      "BI": "1"
+      "government_name": "High Council",
+      "government_type": "Constitutional Republic",
+      "military_level": "1",
+      "gravitics_level": "12",
+      "life_support_level": "1",
+      "biology_level": "1"
     },
     {
       "email": "doop@example.com",
-      "sp_name": "Doop'ov-aci",
+      "species_name": "Doop'ov-aci",
       "home_planet_name": "Baar'u'bomba",
-      "gov_name": "Token Holder",
-      "gov_type": "Bilateral Anarchy",
-      "ML": "1",
-      "GV": "1",
-      "LS": "6",
-      "BI": "7"
+      "government_name": "Token Holder",
+      "government_type": "Bilateral Anarchy",
+      "military_level": "1",
+      "gravitics_level": "1",
+      "life_support_level": "6",
+      "biology_level": "7"
+    },
+    {
+      "email": "email05.example.com",
+      "species_name": "spName05",
+      "home_planet_name": "hpName05",
+      "government_name": "gName05",
+      "government_type": "gType05",
+      "military_level": 6,
+      "gravitics_level": 5,
+      "life_support_level": 3,
+      "biology_level": 1
+    },
+    {
+      "email": "email06.example.com",
+      "species_name": "spName06",
+      "home_planet_name": "hpName06",
+      "government_name": "gName06",
+      "government_type": "gType06",
+      "military_level": 6,
+      "gravitics_level": 5,
+      "life_support_level": 1,
+      "biology_level": 3
+    },
+    {
+      "email": "email07.example.com",
+      "species_name": "spName07",
+      "home_planet_name": "hpName07",
+      "government_name": "gName07",
+      "government_type": "gType07",
+      "military_level": 3,
+      "gravitics_level": 6,
+      "life_support_level": 5,
+      "biology_level": 1
+    },
+    {
+      "email": "email08.example.com",
+      "species_name": "spName08",
+      "home_planet_name": "hpName08",
+      "government_name": "gName08",
+      "government_type": "gType08",
+      "military_level": 3,
+      "gravitics_level": 3,
+      "life_support_level": 3,
+      "biology_level": 6
+    },
+    {
+      "email": "email09.example.com",
+      "species_name": "spName09",
+      "home_planet_name": "hpName09",
+      "government_name": "gName09",
+      "government_type": "gType09",
+      "military_level": 2,
+      "gravitics_level": 5,
+      "life_support_level": 2,
+      "biology_level": 6
+    },
+    {
+      "email": "email10.example.com",
+      "species_name": "spName10",
+      "home_planet_name": "hpName10",
+      "government_name": "gName10",
+      "government_type": "gType10",
+      "military_level": 3,
+      "gravitics_level": 5,
+      "life_support_level": 4,
+      "biology_level": 3
+    },
+    {
+      "email": "email11.example.com",
+      "species_name": "spName11",
+      "home_planet_name": "hpName11",
+      "government_name": "gName11",
+      "government_type": "gType11",
+      "military_level": 4,
+      "gravitics_level": 7,
+      "life_support_level": 1,
+      "biology_level": 3
+    },
+    {
+      "email": "email12.example.com",
+      "species_name": "spName12",
+      "home_planet_name": "hpName12",
+      "government_name": "gName12",
+      "government_type": "gType12",
+      "military_level": 4,
+      "gravitics_level": 5,
+      "life_support_level": 4,
+      "biology_level": 2
+    },
+    {
+      "email": "email13.example.com",
+      "species_name": "spName13",
+      "home_planet_name": "hpName13",
+      "government_name": "gName13",
+      "government_type": "gType13",
+      "military_level": 3,
+      "gravitics_level": 3,
+      "life_support_level": 3,
+      "biology_level": 6
+    },
+    {
+      "email": "email14.example.com",
+      "species_name": "spName14",
+      "home_planet_name": "hpName14",
+      "government_name": "gName14",
+      "government_type": "gType14",
+      "military_level": 2,
+      "gravitics_level": 3,
+      "life_support_level": 6,
+      "biology_level": 4
+    },
+    {
+      "email": "email15.example.com",
+      "species_name": "spName15",
+      "home_planet_name": "hpName15",
+      "government_name": "gName15",
+      "government_type": "gType15",
+      "military_level": 4,
+      "gravitics_level": 3,
+      "life_support_level": 6,
+      "biology_level": 2
+    },
+    {
+      "email": "email16.example.com",
+      "species_name": "spName16",
+      "home_planet_name": "hpName16",
+      "government_name": "gName16",
+      "government_type": "gType16",
+      "military_level": 4,
+      "gravitics_level": 2,
+      "life_support_level": 5,
+      "biology_level": 4
+    },
+    {
+      "email": "email17.example.com",
+      "species_name": "spName17",
+      "home_planet_name": "hpName17",
+      "government_name": "gName17",
+      "government_type": "gType17",
+      "military_level": 2,
+      "gravitics_level": 4,
+      "life_support_level": 3,
+      "biology_level": 6
+    },
+    {
+      "email": "email18.example.com",
+      "species_name": "spName18",
+      "home_planet_name": "hpName18",
+      "government_name": "gName18",
+      "government_type": "gType18",
+      "military_level": 2,
+      "gravitics_level": 4,
+      "life_support_level": 3,
+      "biology_level": 6
     }
   ]
 }

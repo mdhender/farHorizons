@@ -27,7 +27,6 @@ import (
 type GalaxyData struct {
 	Secret            string
 	DNumSpecies       int
-	LessCrowded       bool
 	NumSpecies        int
 	Radius            int
 	NumberOfStars     int
@@ -40,49 +39,55 @@ type GalaxyData struct {
 	}
 }
 
-func GenerateGalaxy(ns int, lessCrowded bool) (*GalaxyData, error) {
-	// seed random number generator
-	Seed(0xC0FFEE)
-
-	if ns < MIN_SPECIES || MAX_SPECIES < ns {
+func GenerateGalaxy(setupData *SetupData) (*GalaxyData, error) {
+	d_num_species := len(setupData.Players)
+	if d_num_species < MIN_SPECIES || MAX_SPECIES < d_num_species {
 		return nil, fmt.Errorf("number of species must be between %d and %d, inclusive", MIN_SPECIES, MAX_SPECIES)
 	}
-	d_num_species := ns
-	if lessCrowded {
+	adjusted_number_of_species := d_num_species
+	if setupData.Galaxy.LowDensity {
 		// add 50% more species to the mix as a way to trick the program into adding more stars
-		d_num_species = (ns * 3) / 2
-		if MAX_SPECIES < d_num_species {
-			d_num_species = MAX_SPECIES
+		adjusted_number_of_species = (d_num_species * 3) / 2
+		if adjusted_number_of_species < MIN_SPECIES || MAX_SPECIES < adjusted_number_of_species {
+			fmt.Printf("Low density option giving, boosting species count to %d\n", adjusted_number_of_species)
+			return nil, fmt.Errorf("adjusted number of species must be between %d and %d, inclusive", MIN_SPECIES, MAX_SPECIES)
 		}
 	}
 
-	/* Get approximate number of star systems to generate. */
-	desired_num_stars := (d_num_species * STANDARD_NUMBER_OF_STAR_SYSTEMS) / STANDARD_NUMBER_OF_SPECIES
-	if lessCrowded {
-		desired_num_stars = (desired_num_stars * 3) / 2
+	// get approximate number of star systems to generate
+	desired_num_stars := (adjusted_number_of_species * STANDARD_NUMBER_OF_STAR_SYSTEMS) / STANDARD_NUMBER_OF_SPECIES
+	fmt.Printf("For %d species, there should be about %d stars.\n", d_num_species, desired_num_stars)
+	if setupData.Galaxy.Overrides.UseOverrides {
+		if setupData.Galaxy.LowDensity {
+			fmt.Printf("For %d species, a low density game needs about %d stars.\n", d_num_species, desired_num_stars)
+		} else {
+			fmt.Printf("For %d species, a game needs about %d stars.\n", d_num_species, desired_num_stars)
+		}
+		desired_num_stars = setupData.Galaxy.Overrides.NumberOfStars
 	}
-	if MAX_STARS < desired_num_stars {
-		return nil, fmt.Errorf("number of stars must be between 1 and %d, inclusive", MAX_STARS)
-	}
-	if lessCrowded {
-		fmt.Printf("For %d species, a less crowded game needs about %d stars.\n", d_num_species, desired_num_stars)
-	} else {
-		fmt.Printf("For %d species, a game needs about %d stars.\n", d_num_species, desired_num_stars)
+	if desired_num_stars < MIN_STARS || MAX_STARS < desired_num_stars {
+		return nil, fmt.Errorf("number of stars must be between %d and %d, inclusive", MIN_STARS, MAX_STARS)
 	}
 
-	/* Get size of galaxy to generate. */
+	// get size of galaxy to generate.
 	volume := desired_num_stars * STANDARD_GALACTIC_RADIUS * STANDARD_GALACTIC_RADIUS * STANDARD_GALACTIC_RADIUS / STANDARD_NUMBER_OF_STAR_SYSTEMS
 	galactic_radius := 2
 	for galactic_radius*galactic_radius*galactic_radius < volume {
 		galactic_radius++
 	}
-	fmt.Printf("For %d stars, the galaxy should have a radius of about %d parsecs.\n", desired_num_stars, galactic_radius)
+	if setupData.Galaxy.Overrides.UseOverrides {
+		fmt.Printf("For %d stars, the galaxy should have a radius of about %d parsecs.\n", desired_num_stars, galactic_radius)
+		galactic_radius = setupData.Galaxy.Overrides.Radius
+	}
+	if galactic_radius < MIN_RADIUS || galactic_radius > MAX_RADIUS {
+		return nil, fmt.Errorf("radius must be between %d and %d parsecs, inclusiven", MIN_RADIUS, MAX_RADIUS)
+	}
 	galactic_diameter := 2 * galactic_radius
 
-	/* Get the number of cubic parsecs within a sphere with a radius of galactic_radius parsecs. */
+	// get the number of cubic parsecs within a sphere with a radius of galactic_radius parsecs.
 	volume = (4 * 314 * galactic_radius * galactic_radius * galactic_radius) / 300
 
-	/* The probability of a star system existing at any particular set of x,y,z coordinates is one in chance_of_star. */
+	// the probability of a star system existing at any particular set of x,y,z coordinates is one in chance_of_star
 	chance_of_star := volume / desired_num_stars
 	if chance_of_star < 50 {
 		return nil, fmt.Errorf("galactic radius is too small for %d stars", desired_num_stars)
@@ -90,7 +95,7 @@ func GenerateGalaxy(ns int, lessCrowded bool) (*GalaxyData, error) {
 		return nil, fmt.Errorf("galactic radius is too large for %d stars", desired_num_stars)
 	}
 
-	/* Initialize star location data. */
+	// initialize star location data
 	var star_here [MAX_DIAMETER][MAX_DIAMETER]int
 	for x := 0; x < galactic_diameter; x++ {
 		for y := 0; y < galactic_diameter; y++ {
@@ -119,8 +124,7 @@ func GenerateGalaxy(ns int, lessCrowded bool) (*GalaxyData, error) {
 
 	galaxy := &GalaxyData{
 		Secret:      "your-private-key-belongs-here",
-		DNumSpecies: ns,
-		LessCrowded: lessCrowded,
+		DNumSpecies: d_num_species,
 		Radius:      galactic_radius,
 		TurnNumber:  0,
 	}

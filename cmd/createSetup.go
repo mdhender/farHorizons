@@ -67,7 +67,7 @@ filled out with player information.`,
 			return fmt.Errorf("number of players must be between %d and %d", fh.MIN_SPECIES, fh.MAX_SPECIES)
 		}
 
-		var s fh.Setup
+		var s fh.SetupData
 		s.Galaxy.Name = galaxyName
 		s.Galaxy.ForbidNearbyWormholes = forbidNearbyWormholes
 		s.Galaxy.LowDensity = lowDensity
@@ -88,7 +88,7 @@ filled out with player information.`,
 			}
 			s.Players = append(s.Players, fh.PlayerData{
 				Email:          fmt.Sprintf("email%02d.example.com", i),
-				SpName:         fmt.Sprintf("spName%02d", i),
+				SpeciesName:    fmt.Sprintf("spName%02d", i),
 				HomePlanetName: fmt.Sprintf("hpName%02d", i),
 				GovName:        fmt.Sprintf("gName%02d", i),
 				GovType:        fmt.Sprintf("gType%02d", i),
