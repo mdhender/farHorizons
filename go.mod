@@ -1,6 +1,6 @@
 module github.com/mdhender/farHorizons
 
-go 1.16
+go 1.24
 
 require (
 	github.com/mitchellh/go-homedir v1.1.0
